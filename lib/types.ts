@@ -8,6 +8,13 @@ export interface CreateNoteRequest {
   body: string;
 }
 
+export interface GitLabUser {
+  id: number;
+  name: string;
+  username: string;
+  avatar_url?: string;
+}
+
 export interface GitLabIssue {
   id: number;
   iid: number;
@@ -17,6 +24,7 @@ export interface GitLabIssue {
   labels: string[];
   created_at: string;
   updated_at: string;
+  author?: GitLabUser;
 }
 
 export interface GitLabNote {
@@ -24,4 +32,5 @@ export interface GitLabNote {
   body: string;
   created_at: string;
   updated_at: string;
+  author?: GitLabUser;
 }

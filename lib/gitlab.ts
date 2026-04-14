@@ -23,6 +23,11 @@ export async function createIssue(data: CreateIssueRequest): Promise<GitLabIssue
       labels: data.labels || [],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      author: {
+        id: 1,
+        name: 'Mock User',
+        username: 'mockuser',
+      },
     };
   }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues`;
@@ -69,6 +74,11 @@ export async function getIssue(iid: number): Promise<GitLabIssue> {
       labels: [],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      author: {
+        id: 1,
+        name: 'Mock User',
+        username: 'mockuser',
+      },
     };
   }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues/${iid}`;
@@ -108,6 +118,11 @@ export async function createNote(iid: number, data: CreateNoteRequest): Promise<
       body: data.body,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      author: {
+        id: 1,
+        name: 'Mock User',
+        username: 'mockuser',
+      },
     };
   }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues/${iid}/notes`;

@@ -39,8 +39,14 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ ii
                 }`}>
                   {issue.state}
                 </span>
+                {issue.author && (
+                  <span className="text-sm text-card-foreground">
+                    由 <span className="font-semibold">{issue.author.name}</span>
+                    <span className="text-muted-foreground ml-1">@{issue.author.username}</span> 创建
+                  </span>
+                )}
                 <span className="text-sm text-muted-foreground">
-                  创建于 {new Date(issue.created_at).toLocaleString()}
+                  {new Date(issue.created_at).toLocaleString()}
                 </span>
               </div>
             </div>

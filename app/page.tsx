@@ -2,7 +2,7 @@ import Link from "next/link";
 import IssueList from "@/components/IssueList";
 import { getAllIssues } from "@/lib/db";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const issues = await getAllIssues();
@@ -12,10 +12,12 @@ export default async function Home() {
       <main className="flex w-full max-w-4xl flex-col py-8 px-4 bg-white dark:bg-black">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 mb-2">
-            GitLab 问题桥接器
+            KiCad 官方 Issue 提交桥
           </h1>
+
           <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400 mb-4">
-            一个轻量级的 Web 应用，无需直接访问 GitLab UI 即可与 GitLab 问题进行交互。
+            为中国用户提供的 KiCad 官方 Issue 提交入口。 所有问题将同步提交到
+            GitLab 官方仓库，支持创建、查看与跟进。
           </p>
           <div className="flex gap-4">
             <Link

@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KiCad Issue CN
+
+A lightweight fullstack GitLab issue bridge built with Next.js.
+
+## Features
+
+- 📝 Create issues
+- 📋 View issues list
+- 📄 View issue details
+- 💬 Reply to issues (comments)
+- 📡 Webhook receiver for GitLab events
+- 🐳 Docker support for deployment
+
+## Tech Stack
+
+- **Next.js 16+** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **SQLite** (for future enhancements)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 22+
+- pnpm (or npm/yarn)
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+GITLAB_TOKEN=your-gitlab-personal-access-token
+GITLAB_PROJECT_ID=15502567  # Default value
+GITLAB_BASE_URL=https://gitlab.com/api/v4  # Default value
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+pnpm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Start development server
+pnpm dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+### Build for Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Build the application
+pnpm build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Start production server
+pnpm start
+```
 
-## Deploy on Vercel
+## Docker Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The project includes a Dockerfile for containerized deployment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Build Docker Image
+
+```bash
+docker build -t kicad-issue-cn .
+```
+
+### Run Docker Container
+
+```bash
+docker run -d \
+  -p 3000:3000 \
+  -e GITLAB_TOKEN=your-token \
+  -v kicad-issue-data:/data \
+  kicad-issue-cn
+```
+
+### Default Configuration
+
+- **GitLab Project ID**: `15502567`
+- **GitLab Base URL**: `https://gitlab.com/api/v4`
+- **Database Path**: `/data/issues.db` (persistent via volume)
+
+## API Routes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/issues` | Create a new issue |
+| GET | `/api/issues` | List all issues |
+| GET | `/api/issues/[iid]` | Get issue details |
+| GET | `/api/issues/[iid]/notes` | List issue comments |
+| POST | `/api/issues/[iid]/notes` | Add a comment |
+| POST | `/api/webhook/gitlab` | Receive GitLab webhook events |
+
+## Project Structure
+
+```
+app/
+  api/
+    issues/
+      route.ts
+      [iid]/
+        route.ts
+        notes/
+          route.ts
+    webhook/gitlab/
+      route.ts
+  issues/
+    page.tsx
+    new/
+      page.tsx
+    [iid]/
+      page.tsx
+components/
+  IssueList.tsx
+  IssueItem.tsx
+  CommentList.tsx
+  CommentItem.tsx
+  CommentForm.tsx
+lib/
+  gitlab.ts
+  types.ts
+```

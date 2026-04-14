@@ -4,8 +4,8 @@ import { getAllIssues } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-export default function IssuesPage() {
-  const issues = getAllIssues();
+export default async function IssuesPage() {
+  const issues = await getAllIssues();
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">

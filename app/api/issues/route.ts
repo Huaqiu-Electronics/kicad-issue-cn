@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     
     const gitlabIssue = await createIssue(body);
     
-    const localIssue = insertIssue({
+    const localIssue = await insertIssue({
       gitlab_iid: gitlabIssue.iid,
       title: body.title,
       description: body.description,
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const issues = getAllIssues();
+    const issues = await getAllIssues();
     return NextResponse.json(issues);
   } catch (error) {
     console.error(error);

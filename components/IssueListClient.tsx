@@ -30,7 +30,7 @@ export default function IssueListClient({ initialIssues }: IssueListClientProps)
     
     if (searchUsername.trim()) {
       result = result.filter(issue => 
-        issue.author_username.toLowerCase().includes(searchUsername.toLowerCase())
+        issue.username.toLowerCase().includes(searchUsername.toLowerCase())
       );
     }
     

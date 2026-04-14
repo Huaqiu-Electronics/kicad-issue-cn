@@ -14,7 +14,7 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ ii
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-6">
         <Link href="/issues" className="text-blue-600 hover:text-blue-800">
-          ← Back to issues
+          ← 返回问题列表
         </Link>
       </div>
       <div className="mb-8">
@@ -37,7 +37,7 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ ii
           </div>
         )}
         <div className="text-sm text-gray-500 mb-4">
-          Created {new Date(issue.created_at).toLocaleString()}
+          创建于 {new Date(issue.created_at).toLocaleString()}
         </div>
         {issue.description && (
           <div className="p-4 border rounded-lg bg-gray-50">
@@ -46,7 +46,7 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ ii
         )}
       </div>
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-gray-900">Comments</h2>
+        <h2 className="text-xl font-semibold text-gray-900">评论</h2>
         <CommentList notes={notes} />
         <CommentForm iid={parseInt(iid)} />
       </div>

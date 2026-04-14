@@ -38,7 +38,11 @@ ENV NEXT_PUBLIC_ENV="production"
 ENV GITLAB_TOKEN=${GITLAB_TOKEN} \
     GITLAB_PROJECT_ID=${GITLAB_PROJECT_ID} \
     GITLAB_BASE_URL=${GITLAB_BASE_URL} \
+    DB_PATH=/data/issues.db \
     NODE_ENV=production
+
+# Create data directory for database
+RUN mkdir -p /data
 
 # Enable pnpm & install only prod deps
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -50,6 +54,9 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
 COPY --from=builder /app/package.json ./package.json
+
+# Volume for persistent database storage
+VOLUME ["/data"]
 
 EXPOSE 3000
 CMD ["pnpm", "start"]

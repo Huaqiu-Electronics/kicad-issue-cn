@@ -30,10 +30,10 @@ export default function CommentForm({ iid }: CommentFormProps) {
         setBody('');
         router.refresh();
       } else {
-        console.error('Failed to add comment');
+        console.error('添加评论失败');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('错误:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -43,7 +43,7 @@ export default function CommentForm({ iid }: CommentFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="body" className="block text-sm font-medium text-gray-700 mb-1">
-          Add a comment
+          添加评论
         </label>
         <textarea
           id="body"
@@ -51,7 +51,7 @@ export default function CommentForm({ iid }: CommentFormProps) {
           onChange={(e) => setBody(e.target.value)}
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Write your comment..."
+          placeholder="写下您的评论..."
         />
       </div>
       <button
@@ -59,7 +59,7 @@ export default function CommentForm({ iid }: CommentFormProps) {
         disabled={isSubmitting || !body.trim()}
         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {isSubmitting ? 'Submitting...' : 'Add Comment'}
+        {isSubmitting ? '提交中...' : '添加评论'}
       </button>
     </form>
   );

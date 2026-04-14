@@ -9,7 +9,7 @@ export default function CommentList({ notes }: CommentListProps) {
   return (
     <div className="space-y-4">
       {notes.length === 0 ? (
-        <p className="text-gray-500 text-center py-4">No comments yet</p>
+        <p className="text-gray-500 text-center py-4">暂无评论</p>
       ) : (
         notes.map((note) => (
           <CommentItem key={note.id} note={note} />

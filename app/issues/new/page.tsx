@@ -149,7 +149,7 @@ export default function NewIssuePage() {
                     id="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-lg"
+                    className="w-full px-4 py-3 border border-border rounded-xl bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-lg"
                     placeholder="请输入问题标题"
                     required
                   />
@@ -169,7 +169,7 @@ export default function NewIssuePage() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       rows={20}
-                      className="w-full px-4 py-3 bg-background text-foreground focus:ring-0 border-0 font-mono text-sm"
+                      className="w-full px-4 py-3 bg-card text-card-foreground focus:ring-0 border-0 font-mono text-sm placeholder-muted-foreground"
                       placeholder="请描述这个问题..."
                     />
                   </div>
@@ -217,7 +217,7 @@ export default function NewIssuePage() {
                     id="username"
                     value={username}
                     onChange={handleUsernameChange}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3 py-2 border border-border rounded-xl bg-card text-card-foreground text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                     placeholder="请输入您的姓名"
                     required
                   />
@@ -235,7 +235,7 @@ export default function NewIssuePage() {
                   type="text"
                   value={labels}
                   onChange={(e) => setLabels(e.target.value)}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3 py-2 border border-border rounded-xl bg-card text-card-foreground text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                   placeholder="bug, 新功能, 等"
                 />
                 <p className="mt-1 text-xs text-muted-foreground">用逗号分隔多个标签</p>

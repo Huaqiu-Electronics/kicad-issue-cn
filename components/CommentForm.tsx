@@ -50,7 +50,7 @@ export default function CommentForm({ iid }: CommentFormProps) {
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={4}
-          className="w-full px-4 py-3 border border-border rounded-xl bg-background text-foreground focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          className="w-full px-4 py-3 border border-border rounded-xl bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
           placeholder="写下您的评论..."
         />
       </div>

@@ -7,9 +7,11 @@ interface CommentListProps {
 
 export default function CommentList({ notes }: CommentListProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {notes.length === 0 ? (
-        <p className="text-gray-500 text-center py-4">暂无评论</p>
+        <div className="text-center py-12">
+          <p className="text-xl text-gray-500 dark:text-gray-400">暂无评论</p>
+        </div>
       ) : (
         notes.map((note) => (
           <CommentItem key={note.id} note={note} />

@@ -7,9 +7,11 @@ interface IssueListProps {
 
 export default function IssueList({ issues }: IssueListProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {issues.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">暂无问题</p>
+        <div className="text-center py-20">
+          <p className="text-2xl text-gray-500 dark:text-gray-400">暂无问题</p>
+        </div>
       ) : (
         issues.map((issue) => (
           <IssueItem key={issue.id} issue={issue} />

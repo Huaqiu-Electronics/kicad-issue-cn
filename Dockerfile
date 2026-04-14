@@ -3,10 +3,10 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Declare build-time arguments
+# Declare build-time arguments with defaults
 ARG GITLAB_TOKEN
-ARG GITLAB_PROJECT_ID
-ARG GITLAB_BASE_URL
+ARG GITLAB_PROJECT_ID=15502567
+ARG GITLAB_BASE_URL=https://gitlab.com/api/v4
 
 # Pass to environment for the build phase
 ENV GITLAB_TOKEN=${GITLAB_TOKEN} \
@@ -36,8 +36,8 @@ ENV PORT=3000
 # runtime defaults (can be overridden with docker run -e KEY=...)
 ENV NEXT_PUBLIC_ENV="production"
 ENV GITLAB_TOKEN=${GITLAB_TOKEN} \
-    GITLAB_PROJECT_ID=${GITLAB_PROJECT_ID} \
-    GITLAB_BASE_URL=${GITLAB_BASE_URL} \
+    GITLAB_PROJECT_ID=15502567 \
+    GITLAB_BASE_URL=https://gitlab.com/api/v4 \
     DB_PATH=/data/issues.db \
     NODE_ENV=production
 

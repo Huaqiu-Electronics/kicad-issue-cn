@@ -1,62 +1,63 @@
 # ---------- 1. Builder stage ----------
-FROM node:22-alpine AS builder
+FROM node:22 AS builder
 
 WORKDIR /app
 
-# Declare build-time arguments with defaults
-ARG GITLAB_TOKEN
+# Build arguments (DO NOT persist secrets in ENV)
 ARG GITLAB_PROJECT_ID=15502567
 ARG GITLAB_BASE_URL=https://gitlab.com/api/v4
 
-# Pass to environment for the build phase
-ENV GITLAB_TOKEN=${GITLAB_TOKEN} \
+ENV NODE_ENV=production \
     GITLAB_PROJECT_ID=${GITLAB_PROJECT_ID} \
-    GITLAB_BASE_URL=${GITLAB_BASE_URL} \
-    NODE_ENV=production
+    GITLAB_BASE_URL=${GITLAB_BASE_URL}
 
-# Enable pnpm
+# Enable pnpm via corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Install dependencies
+# Install dependencies first (better caching)
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
-# Build app
+# Copy source
 COPY . .
+
+# Build Next.js app
 RUN pnpm build
 
 
-# ---------- 2. Runner stage (production) ----------
-FROM node:22-alpine AS runner
+# ---------- 2. Runner stage ----------
+FROM node:22 AS runner
 
 WORKDIR /app
+
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV NEXT_PUBLIC_ENV=production
+ENV DB_PATH=/data/issues.db
 
-# runtime defaults (can be overridden with docker run -e KEY=...)
-ENV NEXT_PUBLIC_ENV="production"
-ENV GITLAB_TOKEN=${GITLAB_TOKEN} \
-    GITLAB_PROJECT_ID=15502567 \
-    GITLAB_BASE_URL=https://gitlab.com/api/v4 \
-    DB_PATH=/data/issues.db \
-    NODE_ENV=production
-
-# Create data directory for database
+# Create persistent data directory
 RUN mkdir -p /data
 
-# Enable pnpm & install only prod deps
+# Enable pnpm in runtime (only needed if you use pnpm start)
 RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Install only production dependencies
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --prod --frozen-lockfile
 
-# Copy build output & static assets
+# Copy build output
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
 COPY --from=builder /app/package.json ./package.json
 
-# Volume for persistent database storage
+# Optional: ensure correct permissions
+RUN chown -R node:node /app /data
+
+USER node
+
 VOLUME ["/data"]
 
 EXPOSE 3000
+
 CMD ["pnpm", "start"]

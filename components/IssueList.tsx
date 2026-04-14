@@ -10,7 +10,7 @@ export default function IssueList({ issues }: IssueListProps) {
     <div className="space-y-6">
       {issues.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-2xl text-gray-500 dark:text-gray-400">暂无问题</p>
+          <p className="text-2xl text-muted-foreground">暂无问题</p>
         </div>
       ) : (
         issues.map((issue) => (

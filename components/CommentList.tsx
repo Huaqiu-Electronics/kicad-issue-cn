@@ -10,7 +10,7 @@ export default function CommentList({ notes }: CommentListProps) {
     <div className="space-y-6">
       {notes.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-xl text-gray-500 dark:text-gray-400">暂无评论</p>
+          <p className="text-xl text-muted-foreground">暂无评论</p>
         </div>
       ) : (
         notes.map((note) => (

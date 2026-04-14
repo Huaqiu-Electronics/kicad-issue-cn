@@ -13,15 +13,15 @@ export default function IssueItem({ issue }: IssueItemProps) {
   return (
     <Link 
       href={`/issues/${issue.gitlab_iid}`} 
-      className="block p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 hover:shadow-xl transition-all transform hover:-translate-y-1"
+      className="block p-6 border border-border rounded-2xl bg-card hover:shadow-xl transition-all transform hover:-translate-y-1"
     >
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{issue.title}</h3>
+      <h3 className="text-xl font-bold text-card-foreground mb-3">{issue.title}</h3>
       <div className="flex flex-wrap items-center gap-3 mb-3">
         <span className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
           #{issue.gitlab_iid}
         </span>
-        <span className="text-sm text-gray-600 dark:text-gray-400">由 {issue.username} 提交</span>
-        <span className="text-sm text-gray-500 dark:text-gray-500">
+        <span className="text-sm text-muted-foreground">由 {issue.username} 提交</span>
+        <span className="text-sm text-muted-foreground">
           {new Date(issue.created_at).toLocaleString()}
         </span>
       </div>

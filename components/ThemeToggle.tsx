@@ -1,36 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useTheme } from '@/components/ui/ThemeContext';
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
-  }, []);
+  const { theme, setTheme, computedTheme } = useTheme();
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    localStorage.setItem('theme', newTheme);
+    if (theme === 'auto') {
+      setTheme('light');
+    } else if (theme === 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('auto');
+    }
   };
-
-  if (!theme) return null;
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+      className="p-2 rounded-lg bg-secondary hover:bg-accent transition-colors"
       aria-label="Toggle theme"
     >
-      {theme === 'light' ? (
+      {computedTheme === 'light' ? (
         <svg
-          className="w-6 h-6 text-gray-800"
+          className="w-6 h-6 text-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -44,7 +37,7 @@ export default function ThemeToggle() {
         </svg>
       ) : (
         <svg
-          className="w-6 h-6 text-yellow-300"
+          className="w-6 h-6 text-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

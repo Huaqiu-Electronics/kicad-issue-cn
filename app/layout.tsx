@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import { Heart, Coffee } from "lucide-react";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import { ThemeProvider } from "@/components/ui/ThemeContext";
@@ -54,7 +55,18 @@ export default function RootLayout({
             </main>
             <footer className="border-t border-border bg-card">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} KiCad Issue CN. All rights reserved.
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <p className="flex items-center gap-1">
+                    Powered by{" "}
+                    <Link href="https://www.eda.cn/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline dark:text-blue-400">
+                      eda.cn
+                    </Link>
+                  </p>
+                  <span className="text-muted-foreground">•</span>
+                  <p className="flex items-center gap-1">
+                    Made with <Heart className="w-4 h-4 text-red-500" /> and <Coffee className="w-4 h-4 text-amber-600" />
+                  </p>
+                </div>
               </div>
             </footer>
           </ThemeApplier>

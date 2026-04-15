@@ -13,9 +13,6 @@ RUN pnpm install --frozen-lockfile
 # Copy source
 COPY . .
 
-RUN pnpm prisma generate
-
-# Build Next.js
 RUN pnpm build
 
 
@@ -40,6 +37,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 
 # ✅ CRITICAL: Prisma runtime files
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # (optional but safe) ensure permissions

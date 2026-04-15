@@ -94,32 +94,8 @@ docker run -d \
 | POST | `/api/issues/[iid]/notes` | Add a comment |
 | POST | `/api/webhook/gitlab` | Receive GitLab webhook events |
 
-## Project Structure
 
-```
-app/
-  api/
-    issues/
-      route.ts
-      [iid]/
-        route.ts
-        notes/
-          route.ts
-    webhook/gitlab/
-      route.ts
-  issues/
-    page.tsx
-    new/
-      page.tsx
-    [iid]/
-      page.tsx
-components/
-  IssueList.tsx
-  IssueItem.tsx
-  CommentList.tsx
-  CommentItem.tsx
-  CommentForm.tsx
-lib/
-  gitlab.ts
-  types.ts
+## Development
+```bash
+docker compose up --build
 ```

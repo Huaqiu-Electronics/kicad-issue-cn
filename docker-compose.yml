@@ -1,14 +1,6 @@
+version: "3.9"
 
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/kicad
-    depends_on:
-      - db
-
   db:
     image: postgres:16
     restart: always
@@ -18,6 +10,24 @@ services:
       POSTGRES_DB: kicad
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kicad"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/kicad
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:

@@ -1,39 +1,15 @@
-import sqlite3 from 'sqlite3';
-import path from 'path';
-import fs from 'fs';
-import { open, Database } from 'sqlite';
+import { PrismaClient } from '@prisma/client';
 
-// Allow database path to be configured via environment variable
-const dbPath = process.env.DB_PATH || path.join(process.cwd(), 'data', 'issues.db');
+let prisma: PrismaClient;
 
-// Ensure the data directory exists
-const dataDir = path.dirname(dbPath);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-
-let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
-
-async function initDb() {
-  if (db) return;
-
-  db = await open({
-    filename: dbPath,
-    driver: sqlite3.Database
-  });
-
-  // Create issues table if it doesn't exist
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS issues (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      gitlab_iid INTEGER NOT NULL UNIQUE,
-      title TEXT NOT NULL,
-      description TEXT,
-      labels TEXT,
-      username TEXT NOT NULL,
-      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  // In development, use a global variable to prevent multiple PrismaClient instances
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+  prisma = global.prisma;
 }
 
 export interface LocalIssue {
@@ -53,66 +29,84 @@ export async function insertIssue(data: {
   labels?: string;
   username: string;
 }): Promise<LocalIssue> {
-  await initDb();
-  
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
-  
-  const result = await db.run(`
-    INSERT INTO issues (gitlab_iid, title, description, labels, username)
-    VALUES (?, ?, ?, ?, ?)
-  `, [data.gitlab_iid, data.title, data.description, data.labels, data.username]);
-  
-  const issue = await getIssueById(result.lastID as number);
-  if (!issue) {
-    throw new Error('Failed to retrieve inserted issue');
-  }
-  return issue;
+  const issue = await prisma.issue.create({
+    data: {
+      gitlabIid: data.gitlab_iid,
+      title: data.title,
+      description: data.description,
+      labels: data.labels,
+      username: data.username,
+    },
+  });
+
+  return {
+    id: issue.id,
+    gitlab_iid: issue.gitlabIid,
+    title: issue.title,
+    description: issue.description,
+    labels: issue.labels,
+    username: issue.username,
+    created_at: issue.createdAt.toISOString(),
+  };
 }
 
 export async function getIssueById(id: number): Promise<LocalIssue | undefined> {
-  await initDb();
-  
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
-  
-  const issue = await db.get('SELECT * FROM issues WHERE id = ?', [id]);
-  return issue as LocalIssue | undefined;
+  const issue = await prisma.issue.findUnique({
+    where: { id },
+  });
+
+  if (!issue) return undefined;
+
+  return {
+    id: issue.id,
+    gitlab_iid: issue.gitlabIid,
+    title: issue.title,
+    description: issue.description,
+    labels: issue.labels,
+    username: issue.username,
+    created_at: issue.createdAt.toISOString(),
+  };
 }
 
 export async function getIssueByGitlabIid(gitlab_iid: number): Promise<LocalIssue | undefined> {
-  await initDb();
-  
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
-  
-  const issue = await db.get('SELECT * FROM issues WHERE gitlab_iid = ?', [gitlab_iid]);
-  return issue as LocalIssue | undefined;
+  const issue = await prisma.issue.findUnique({
+    where: { gitlabIid: gitlab_iid },
+  });
+
+  if (!issue) return undefined;
+
+  return {
+    id: issue.id,
+    gitlab_iid: issue.gitlabIid,
+    title: issue.title,
+    description: issue.description,
+    labels: issue.labels,
+    username: issue.username,
+    created_at: issue.createdAt.toISOString(),
+  };
 }
 
 export async function getAllIssues(): Promise<LocalIssue[]> {
-  await initDb();
-  
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
-  
-  const issues = await db.all('SELECT * FROM issues ORDER BY created_at DESC');
-  return issues as LocalIssue[];
+  const issues = await prisma.issue.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return issues.map(issue => ({
+    id: issue.id,
+    gitlab_iid: issue.gitlabIid,
+    title: issue.title,
+    description: issue.description,
+    labels: issue.labels,
+    username: issue.username,
+    created_at: issue.createdAt.toISOString(),
+  }));
 }
 
 export async function issueExists(gitlab_iid: number): Promise<boolean> {
-  await initDb();
-  
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
-  
-  const result = await db.get('SELECT 1 FROM issues WHERE gitlab_iid = ?', [gitlab_iid]);
-  return !!result;
+  const count = await prisma.issue.count({
+    where: { gitlabIid: gitlab_iid },
+  });
+  return count > 0;
 }
 
-export { db };
+export { prisma as db };

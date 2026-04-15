@@ -42,3 +42,4 @@ next-env.d.ts
 
 issues.db
 mock-gitlab
+/lib/generated/prisma

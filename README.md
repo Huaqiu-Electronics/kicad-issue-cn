@@ -149,8 +149,22 @@ docker run -d \
   -e GITLAB_PROJECT_ID=52152403 \
   -e GITLAB_BASE_URL=https://gitlab.com/api/v4 \
   -e DATABASE_URL=postgresql://postgres:postgres@host.docker.internal:5432/kicad \
-  registry.cn-shanghai.aliyuncs.com/kicad/kicad-issue-cn:latest
+  ghcr.io/huaqiu-electronics/kicad-issue-cn:latest 
 ```
+
+
+- If you can not access github:
+
+```bash
+docker run -d \
+  -p 3000:3000 \
+  -e GITLAB_TOKEN=your-token \
+  -e GITLAB_PROJECT_ID=52152403 \
+  -e GITLAB_BASE_URL=https://gitlab.com/api/v4 \
+  -e DATABASE_URL=postgresql://postgres:postgres@host.docker.internal:5432/kicad \
+  registry.cn-shanghai.aliyuncs.com/kicad/kicad-issue-cn:latest 
+```
+
 
 ---
 

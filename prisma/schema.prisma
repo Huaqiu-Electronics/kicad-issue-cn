@@ -13,3 +13,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Issue {
+  id          Int      @id @default(autoincrement())
+  gitlabIid   Int      @unique
+  title       String
+  description String?
+  labels      String?
+  username    String
+  createdAt   DateTime @default(now())
+
+  @@map("issues")
+}

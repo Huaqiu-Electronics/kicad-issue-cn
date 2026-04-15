@@ -13,7 +13,7 @@ RUN pnpm install --frozen-lockfile
 # Copy source
 COPY . .
 
-RUN pnpm dlx prisma@6.6.0 generate
+RUN pnpm prisma generate
 
 # Build Next.js
 RUN pnpm build

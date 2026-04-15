@@ -1,7 +1,8 @@
 import { CreateIssueRequest, CreateNoteRequest, GitLabIssue, GitLabNote } from './types';
 
+const KICAD_GITLAB_PROJECT_ID = '15502567'
 const GITLAB_TOKEN = process.env.GITLAB_TOKEN || '';
-const GITLAB_PROJECT_ID = process.env.GITLAB_PROJECT_ID || '15502567';
+const GITLAB_PROJECT_ID = process.env.GITLAB_PROJECT_ID || KICAD_GITLAB_PROJECT_ID;
 const GITLAB_BASE_URL = process.env.GITLAB_BASE_URL || 'https://gitlab.com/api/v4';
 
 function getHeaders() {

@@ -35,4 +35,4 @@ USER node
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["sh", "-c", "pnpm exec prisma db push && pnpm start"]

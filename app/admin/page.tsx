@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useI18n } from '@/app/hooks/useI18n';
 
 interface Invite {
   id: string;
@@ -27,6 +28,7 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useI18n();
 
   useEffect(() => {
     fetchInvites();
@@ -129,11 +131,11 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('admin.title')}</h1>
         
         {error && (
           <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
-            <strong className="font-bold">Error:</strong>
+            <strong className="font-bold">{t('admin.error')}</strong>
             <span className="block sm:inline"> {error}</span>
           </div>
         )}
@@ -141,39 +143,39 @@ export default function AdminPage() {
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Invite Management */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold text-gray-900">Invite Management</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{t('admin.invite_management')}</h2>
             <div className="mt-4">
               <button
                 onClick={handleGenerateInvite}
                 disabled={loading}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Generating...' : 'Generate Invite'}
+                {loading ? t('admin.generating') : t('admin.generate_invite')}
               </button>
             </div>
             {newInvite && (
               <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                <strong className="font-bold">New Invite:</strong>
+                <strong className="font-bold">{t('admin.new_invite')}</strong>
                 <span className="block sm:inline"> {newInvite.code}</span>
               </div>
             )}
             <div className="mt-6">
-              <h3 className="text-sm font-medium text-gray-700">Existing Invites</h3>
+              <h3 className="text-sm font-medium text-gray-700">{t('admin.existing_invites')}</h3>
               <div className="mt-2 overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Code
+                        {t('admin.code')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Used
+                        {t('admin.used')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Used By
+                        {t('admin.used_by')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Created At
+                        {t('admin.created_at')}
                       </th>
                     </tr>
                   </thead>
@@ -184,10 +186,10 @@ export default function AdminPage() {
                           {invite.code}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {invite.used ? 'Yes' : 'No'}
+                          {invite.used ? t('admin.yes') : t('admin.no')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {invite.usedBy || 'N/A'}
+                          {invite.usedBy || t('admin.na')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(invite.createdAt).toLocaleString()}
@@ -202,10 +204,10 @@ export default function AdminPage() {
 
           {/* User Management */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold text-gray-900">User Management</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{t('admin.user_management')}</h2>
             <div className="mt-4 space-y-4">
               <div>
-                <h3 className="text-sm font-medium text-gray-700">Promote User to Admin</h3>
+                <h3 className="text-sm font-medium text-gray-700">{t('admin.promote_user')}</h3>
                 <div className="mt-2 flex space-x-2">
                   <input
                     type="email"
@@ -215,16 +217,16 @@ export default function AdminPage() {
                     className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-3 py-2"
                   />
                   <button
-                    onClick={handlePromote}
-                    disabled={loading}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? 'Promoting...' : 'Promote'}
-                  </button>
+                  onClick={handlePromote}
+                  disabled={loading}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? t('admin.promoting') : t('admin.promote')}
+                </button>
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-700">Demote Admin to User</h3>
+                <h3 className="text-sm font-medium text-gray-700">{t('admin.demote_admin')}</h3>
                 <div className="mt-2 flex space-x-2">
                   <input
                     type="email"
@@ -234,17 +236,17 @@ export default function AdminPage() {
                     className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-3 py-2"
                   />
                   <button
-                    onClick={handleDemote}
-                    disabled={loading}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? 'Demoting...' : 'Demote'}
-                  </button>
+                  onClick={handleDemote}
+                  disabled={loading}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? t('admin.demoting') : t('admin.demote')}
+                </button>
                 </div>
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="text-sm font-medium text-gray-700">Users</h3>
+              <h3 className="text-sm font-medium text-gray-700">{t('admin.users')}</h3>
               <div className="mt-2 overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -253,10 +255,10 @@ export default function AdminPage() {
                         Email
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Role
+                        {t('admin.role')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Created At
+                        {t('admin.created_at')}
                       </th>
                     </tr>
                   </thead>

@@ -5,9 +5,7 @@ import { requireAuth } from '@/lib/auth';
 
 export async function GET(request: Request, { params }: { params: Promise<{ iid: string }> }) {
   try {
-    // Require authentication
-    await requireAuth();
-    
+    // No authentication required for viewing issues
     const { iid } = await params;
     const numericIid = parseInt(iid);
     
@@ -24,11 +22,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ iid:
     });
   } catch (error) {
     console.error(error);
-    if (error instanceof Error) {
-      if (error.message === 'Unauthorized') {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-    }
     return NextResponse.json({ error: 'Failed to get issue' }, { status: 500 });
   }
 }

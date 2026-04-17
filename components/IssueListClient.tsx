@@ -10,9 +10,11 @@ const ITEMS_PER_PAGE = 10;
 
 interface IssueListClientProps {
   initialIssues: LocalIssue[];
+  t: (key: string, fallback?: string) => string;
+  lang: string;
 }
 
-export default function IssueListClient({ initialIssues }: IssueListClientProps) {
+export default function IssueListClient({ initialIssues, t, lang }: IssueListClientProps) {
   const [issues] = useState<LocalIssue[]>(initialIssues);
   const [searchTitle, setSearchTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,25 +49,25 @@ export default function IssueListClient({ initialIssues }: IssueListClientProps)
       <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10">
         <div className="flex-1 w-full">
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">按标题搜索</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">{t('issues.search_title')}</label>
             <input
               type="text"
               value={searchTitle}
               onChange={(e) => setSearchTitle(e.target.value)}
-              placeholder="输入标题关键词..."
+              placeholder={t('issues.search_placeholder')}
               className="w-full px-4 py-3 rounded-xl border border-border bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
             />
           </div>
         </div>
         <Link
-          href="/issues/new"
+          href={`/${lang}/issues/new`}
           className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg whitespace-nowrap"
         >
-          新建问题
+          {t('issues.new_issue')}
         </Link>
       </div>
       
-      <IssueList issues={currentIssues} />
+      <IssueList issues={currentIssues} t={t} lang={lang} />
       
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-10">
@@ -75,14 +77,14 @@ export default function IssueListClient({ initialIssues }: IssueListClientProps)
             className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg text-card-foreground hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-4 h-4" />
-            上一页
+            {t('issues.prev_page')}
           </button>
           <div className="text-center">
             <span className="text-muted-foreground">
-              第 {currentPage} 页 / 共 {totalPages} 页
+              {t('issues.page')} {currentPage} {t('issues.of')} {totalPages} {t('issues.pages')}
             </span>
             <span className="text-muted-foreground ml-2">
-              ({filteredIssues.length} 条记录)
+              ({filteredIssues.length} {t('issues.records')})
             </span>
           </div>
           <button
@@ -90,7 +92,7 @@ export default function IssueListClient({ initialIssues }: IssueListClientProps)
             disabled={currentPage === totalPages}
             className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg text-card-foreground hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            下一页
+            {t('issues.next_page')}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

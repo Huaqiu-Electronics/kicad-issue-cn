@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useI18n } from '@/app/hooks/useI18n';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useI18n();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,19 +45,19 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Create your account</h2>
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">{t('register.title')}</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
-              <strong className="font-bold">Error:</strong>
+              <strong className="font-bold">{t('register.error')}</strong>
               <span className="block sm:inline"> {error}</span>
             </div>
           )}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                {t('register.email')}
               </label>
               <input
                 id="email"
@@ -70,7 +72,7 @@ export default function RegisterPage() {
             </div>
             <div className="mt-4">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                {t('register.password')}
               </label>
               <input
                 id="password"
@@ -85,7 +87,7 @@ export default function RegisterPage() {
             </div>
             <div className="mt-4">
               <label htmlFor="inviteCode" className="block text-sm font-medium text-gray-700">
-                Invite code (required unless you&apos;re an admin)
+                {t('register.invite_code')}
               </label>
               <input
                 id="inviteCode"
@@ -103,7 +105,7 @@ export default function RegisterPage() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing up...' : 'Sign up'}
+              {loading ? t('register.loading') : t('register.submit')}
             </button>
           </div>
           <div className="text-center">
@@ -111,7 +113,7 @@ export default function RegisterPage() {
               href="/login"
               className="group relative text-sm text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Already have an account? Sign in
+              {t('register.has_account')}
             </a>
           </div>
         </form>

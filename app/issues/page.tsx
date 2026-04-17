@@ -1,16 +1,20 @@
-import IssueListClient from '@/components/IssueListClient';
-import { getIssuesByUserId } from '@/lib/db';
-import { requireAuth } from '@/lib/auth';
+import { getIssuesByUserId, getAllIssues } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
+import IssuesContent from './issues-content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function IssuesPage() {
-  const user = await requireAuth();
-  const issues = await getIssuesByUserId(user.id);
+  const user = await getCurrentUser();
+  let issues;
+  
+  if (user) {
+    issues = await getIssuesByUserId(user.id);
+  } else {
+    issues = await getAllIssues();
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <IssueListClient initialIssues={issues} />
-    </div>
+    <IssuesContent issues={issues} />
   );
 }

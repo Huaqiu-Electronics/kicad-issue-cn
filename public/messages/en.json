@@ -1,0 +1,148 @@
+{
+  "common": {
+    "nav": {
+      "home": "Home",
+      "issues": "Issues",
+      "admin": "Admin",
+      "login": "Login",
+      "register": "Register",
+      "logout": "Logout"
+    },
+    "footer": {
+      "powered_by": "Powered by",
+      "made_with": "Made with",
+      "and": "and"
+    }
+  },
+  "home": {
+    "title": "KiCad Official Issue Bridge",
+    "description": "An official KiCad issue submission portal for Chinese users. All issues will be synchronized to the GitLab official repository, supporting creation, viewing, and tracking.",
+    "new_issue": "New Issue",
+    "view_issues": "View My Issues",
+    "login": "Login",
+    "register": "Register",
+    "feature1": {
+      "title": "Convenient Issue Submission",
+      "description": "Submit issues in Chinese, and we will help you translate and submit them to GitLab"
+    },
+    "feature2": {
+      "title": "Complete Issue Management",
+      "description": "View, comment on, and track the latest status of issues"
+    },
+    "feature3": {
+      "title": "Professional Technical Support",
+      "description": "Get professional technical support and solutions from the KiCad community"
+    }
+  },
+  "login": {
+    "title": "Sign in to your account",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "loading": "Signing in...",
+    "error": "Error:",
+    "no_account": "Don't have an account? Sign up"
+  },
+  "register": {
+    "title": "Create your account",
+    "email": "Email address",
+    "password": "Password",
+    "invite_code": "Invite code (required unless you're an admin)",
+    "submit": "Sign up",
+    "loading": "Signing up...",
+    "error": "Error:",
+    "has_account": "Already have an account? Sign in"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "error": "Error:",
+    "invite_management": "Invite Management",
+    "generate_invite": "Generate Invite",
+    "generating": "Generating...",
+    "new_invite": "New Invite:",
+    "existing_invites": "Existing Invites",
+    "code": "Code",
+    "used": "Used",
+    "used_by": "Used By",
+    "created_at": "Created At",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
+    "user_management": "User Management",
+    "promote_user": "Promote User to Admin",
+    "promote": "Promote",
+    "promoting": "Promoting...",
+    "demote_admin": "Demote Admin to User",
+    "demote": "Demote",
+    "demoting": "Demoting...",
+    "users": "Users",
+    "role": "Role"
+  },
+  "issues": {
+    "new_issue": "New Issue",
+    "search_title": "Search by title",
+    "search_placeholder": "Enter title keywords...",
+    "no_issues": "No issues found",
+    "page": "Page",
+    "of": "/",
+    "pages": "pages",
+    "records": "records",
+    "prev_page": "Previous Page",
+    "next_page": "Next Page"
+  },
+  "issue_new": {
+    "back": "Back to Issues",
+    "title": "New Issue",
+    "error": "Error:",
+    "issue_title": "Title",
+    "issue_description": "Description",
+    "markdown_supported": "Markdown is supported",
+    "placeholder_description": "Describe the issue...",
+    "actions": "Actions",
+    "create_issue": "Create Issue",
+    "creating": "Creating...",
+    "cancel": "Cancel",
+    "labels": "Labels",
+    "labels_placeholder": "bug, feature, etc",
+    "labels_hint": "Separate multiple labels with commas",
+    "tips": "Tips",
+    "tip_1": "Report only one issue",
+    "tip_2": "Search first to ensure the issue hasn't been reported",
+    "tip_3": "Only provide necessary information to fix the issue",
+    "tip_4": "If using a stable version, ensure it's the latest",
+    "tip_5": "📸 For visual issues, attach screenshots; for complex steps, attach videos",
+    "tip_6": "🔢 In the KiCad Version section, paste version information (Help → About KiCad → Copy Version Information)"
+  },
+  "issue_detail": {
+    "back": "Back to Issues",
+    "comments": "Comments",
+    "add_comment": "Add Comment",
+    "comment_placeholder": "Write your comment...",
+    "submitting": "Submitting...",
+    "issue_info": "Issue Information",
+    "status": "Status:",
+    "created_at": "Created At:",
+    "labels": "Labels:" 
+  },
+  "api": {
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "internal_error": "Internal server error",
+    "user_exists": "User already exists",
+    "invite_required": "Invite code required",
+    "invalid_invite": "Invalid or used invite code",
+    "invalid_credentials": "Invalid credentials",
+    "user_not_found": "User not found",
+    "cannot_demote_self": "Cannot demote yourself",
+    "user_not_admin": "User is not an admin",
+    "last_admin": "Cannot demote the last admin",
+    "title_required": "Title is required",
+    "body_required": "Body is required",
+    "issue_not_found": "Issue not found",
+    "failed_create_issue": "Failed to create issue",
+    "failed_list_issues": "Failed to list issues",
+    "failed_get_issue": "Failed to get issue",
+    "failed_list_notes": "Failed to list notes",
+    "failed_create_note": "Failed to create note"
+  }
+}

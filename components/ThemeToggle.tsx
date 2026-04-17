@@ -1,9 +1,16 @@
 'use client';
 
 import { useTheme } from '@/components/ui/ThemeContext';
+import { useState, useEffect } from 'react';
 
 export default function ThemeToggle() {
   const { theme, setTheme, computedTheme } = useTheme();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Set isHydrated to true after the component has mounted
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const toggleTheme = () => {
     if (theme === 'auto') {
@@ -15,6 +22,33 @@ export default function ThemeToggle() {
     }
   };
 
+  // During server-side rendering and initial hydration, render a placeholder
+  // This ensures the server and client render the same content initially
+  if (!isHydrated) {
+    return (
+      <button
+        onClick={toggleTheme}
+        className="p-2 rounded-lg bg-secondary hover:bg-accent transition-colors"
+        aria-label="Toggle theme"
+      >
+        <svg
+          className="w-6 h-6 text-foreground"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
+        </svg>
+      </button>
+    );
+  }
+
+  // After hydration, render the actual theme toggle
   return (
     <button
       onClick={toggleTheme}

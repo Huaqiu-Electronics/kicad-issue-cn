@@ -5,14 +5,15 @@ import { LocalIssue } from '@/lib/db';
 
 interface IssueItemProps {
   issue: LocalIssue;
+  lang?: string;
 }
 
-export default function IssueItem({ issue }: IssueItemProps) {
+export default function IssueItem({ issue, lang = 'zh' }: IssueItemProps) {
   const labels = issue.labels ? issue.labels.split(',') : [];
   
   return (
     <Link 
-      href={`/issues/${issue.gitlab_iid}`} 
+      href={`/${lang}/issues/${issue.gitlab_iid}`} 
       className="block p-6 border border-border rounded-2xl bg-card hover:shadow-xl transition-all transform hover:-translate-y-1"
     >
       <h3 className="text-xl font-bold text-card-foreground mb-3">{issue.title}</h3>

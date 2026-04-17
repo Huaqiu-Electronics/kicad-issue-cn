@@ -89,6 +89,20 @@ export async function getIssuesByUserId(user_id: string): Promise<LocalIssue[]> 
   }));
 }
 
+export async function getAllIssues(): Promise<LocalIssue[]> {
+  const issues = await prisma.issue.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return issues.map(issue => ({
+    id: issue.id,
+    gitlab_iid: issue.gitlabIid,
+    title: issue.title,
+    user_id: issue.userId,
+    created_at: issue.createdAt.toISOString(),
+  }));
+}
+
 export async function issueExists(gitlab_iid: number): Promise<boolean> {
   const count = await prisma.issue.count({
     where: { gitlabIid: gitlab_iid },

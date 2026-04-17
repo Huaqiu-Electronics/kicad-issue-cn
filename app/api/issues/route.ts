@@ -35,18 +35,18 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    // Require authentication
-    const user = await requireAuth();
+    // Get current user (optional)
+    const user = await getCurrentUser();
+    let issues;
     
-    const issues = await getIssuesByUserId(user.id);
+    if (user) {
+      issues = await getIssuesByUserId(user.id);
+    } else {
+      issues = await getAllIssues();
+    }
     return NextResponse.json(issues);
   } catch (error) {
     console.error(error);
-    if (error instanceof Error) {
-      if (error.message === 'Unauthorized') {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-    }
     return NextResponse.json({ error: 'Failed to list issues' }, { status: 500 });
   }
 }

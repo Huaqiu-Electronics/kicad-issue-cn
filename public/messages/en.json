@@ -12,6 +12,10 @@
       "powered_by": "Powered by",
       "made_with": "Made with",
       "and": "and"
+    },
+    "language": {
+      "zh": "中文",
+      "en": "English"
     }
   },
   "home": {
@@ -19,6 +23,7 @@
     "description": "An official KiCad issue submission portal for Chinese users. All issues will be synchronized to the GitLab official repository, supporting creation, viewing, and tracking.",
     "new_issue": "New Issue",
     "view_issues": "View My Issues",
+    "viewIssues": "View Issues",
     "login": "Login",
     "register": "Register",
     "feature1": {
@@ -36,47 +41,79 @@
   },
   "login": {
     "title": "Sign in to your account",
+    "subtitle": "Please log in to submit and manage issues",
     "email": "Email address",
+    "email_placeholder": "Please enter your email",
     "password": "Password",
+    "password_placeholder": "Please enter your password",
     "submit": "Sign in",
-    "loading": "Signing in...",
+    "submitting": "Signing in...",
     "error": "Error:",
-    "no_account": "Don't have an account? Sign up"
+    "error_required": "Please enter email and password",
+    "remember": "Remember me",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account? Sign up",
+    "register": "Don't have an account yet?",
+    "register_now": "Register now"
   },
   "register": {
     "title": "Create your account",
+    "subtitle": "Create an account to submit and manage issues",
     "email": "Email address",
+    "email_placeholder": "Please enter your email",
     "password": "Password",
+    "password_placeholder": "Please enter your password",
     "invite_code": "Invite code (required unless you're an admin)",
     "submit": "Sign up",
-    "loading": "Signing up...",
+    "submitting": "Signing up...",
     "error": "Error:",
-    "has_account": "Already have an account? Sign in"
+    "error_required": "Please enter email and password",
+    "success": "Registration successful! Please log in",
+    "has_account": "Already have an account? Sign in",
+    "login": "Already have an account?",
+    "login_now": "Log in now"
   },
   "admin": {
     "title": "Admin Panel",
     "error": "Error:",
+    "error_required": "Please enter email",
+    "promote_success": "User has been promoted to admin",
+    "demote_success": "User has been demoted to regular user",
+    "invite_success": "Invite has been created",
+    "create_invite": "Create Invite",
+    "email": "Email",
+    "email_placeholder": "Please enter email",
+    "submitting": "Submitting...",
+    "submit": "Submit",
+    "users": "Users List",
+    "role": "Role",
+    "created_at": "Created At",
+    "actions": "Actions",
+    "admin": "Admin",
+    "user": "User",
+    "demote": "Demote",
+    "promote": "Promote",
+    "invites": "Invites List",
+    "token": "Invite Code",
+    "expires_at": "Expires At",
+    "status": "Status",
+    "used": "Used",
+    "unused": "Unused",
     "invite_management": "Invite Management",
     "generate_invite": "Generate Invite",
     "generating": "Generating...",
     "new_invite": "New Invite:",
     "existing_invites": "Existing Invites",
     "code": "Code",
-    "used": "Used",
     "used_by": "Used By",
-    "created_at": "Created At",
     "yes": "Yes",
     "no": "No",
     "na": "N/A",
     "user_management": "User Management",
     "promote_user": "Promote User to Admin",
-    "promote": "Promote",
     "promoting": "Promoting...",
     "demote_admin": "Demote Admin to User",
-    "demote": "Demote",
-    "demoting": "Demoting...",
-    "users": "Users",
-    "role": "Role"
+    "demoting": "Demoting..."
   },
   "issues": {
     "new_issue": "New Issue",
@@ -88,7 +125,8 @@
     "pages": "pages",
     "records": "records",
     "prev_page": "Previous Page",
-    "next_page": "Next Page"
+    "next_page": "Next Page",
+    "submitted_by": "Submitted by"
   },
   "issue_new": {
     "back": "Back to Issues",
@@ -122,7 +160,8 @@
     "issue_info": "Issue Information",
     "status": "Status:",
     "created_at": "Created At:",
-    "labels": "Labels:" 
+    "labels": "Labels:",
+    "no_comments": "No comments"
   },
   "api": {
     "unauthorized": "Unauthorized",

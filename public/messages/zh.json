@@ -12,6 +12,10 @@
       "powered_by": "由",
       "made_with": "使用",
       "and": "和"
+    },
+    "language": {
+      "zh": "中文",
+      "en": "English"
     }
   },
   "home": {
@@ -19,52 +23,97 @@
     "description": "为中国用户提供的 KiCad 官方 Issue 提交入口。 所有问题将同步提交到 GitLab 官方仓库，支持创建、查看与跟进。",
     "new_issue": "新建问题",
     "view_issues": "查看我的问题",
+    "viewIssues": "查看问题",
     "login": "登录",
-    "register": "注册"
+    "register": "注册",
+    "feature1": {
+      "title": "便捷的问题提交",
+      "description": "使用中文提交问题，我们会帮助您翻译并提交到 GitLab"
+    },
+    "feature2": {
+      "title": "完整的问题管理",
+      "description": "查看、评论和跟踪问题的最新状态"
+    },
+    "feature3": {
+      "title": "专业的技术支持",
+      "description": "获取 KiCad 社区的专业技术支持和解决方案"
+    }
   },
   "login": {
     "title": "登录到您的账户",
+    "subtitle": "请登录以提交和管理问题",
     "email": "电子邮件",
+    "email_placeholder": "请输入邮箱",
     "password": "密码",
+    "password_placeholder": "请输入密码",
     "submit": "登录",
-    "loading": "登录中...",
+    "submitting": "登录中...",
     "error": "错误:",
-    "no_account": "没有账户？注册"
+    "error_required": "请输入邮箱和密码",
+    "remember": "记住我",
+    "forgot_password": "忘记密码？",
+    "no_account": "没有账户？注册",
+    "register": "还没有账号？",
+    "register_now": "立即注册"
   },
   "register": {
     "title": "创建您的账户",
+    "subtitle": "创建账号以提交和管理问题",
     "email": "电子邮件",
+    "email_placeholder": "请输入邮箱",
     "password": "密码",
+    "password_placeholder": "请输入密码",
     "invite_code": "邀请码（管理员除外）",
     "submit": "注册",
-    "loading": "注册中...",
+    "submitting": "注册中...",
     "error": "错误:",
-    "has_account": "已有账户？登录"
+    "error_required": "请输入邮箱和密码",
+    "success": "注册成功！请登录",
+    "has_account": "已有账户？登录",
+    "login": "已有账号？",
+    "login_now": "立即登录"
   },
   "admin": {
     "title": "管理面板",
     "error": "错误:",
+    "error_required": "请输入邮箱",
+    "promote_success": "用户已提升为管理员",
+    "demote_success": "用户已降级为普通用户",
+    "invite_success": "邀请已创建",
+    "create_invite": "创建邀请",
+    "email": "邮箱",
+    "email_placeholder": "请输入邮箱",
+    "submitting": "提交中...",
+    "submit": "提交",
+    "users": "用户列表",
+    "role": "角色",
+    "created_at": "创建时间",
+    "actions": "操作",
+    "admin": "管理员",
+    "user": "用户",
+    "demote": "降级",
+    "promote": "提升",
+    "invites": "邀请列表",
+    "token": "邀请码",
+    "expires_at": "过期时间",
+    "status": "状态",
+    "used": "已使用",
+    "unused": "未使用",
     "invite_management": "邀请管理",
     "generate_invite": "生成邀请",
     "generating": "生成中...",
     "new_invite": "新邀请:",
     "existing_invites": "现有邀请",
     "code": "代码",
-    "used": "已使用",
     "used_by": "使用人",
-    "created_at": "创建时间",
     "yes": "是",
     "no": "否",
     "na": "N/A",
     "user_management": "用户管理",
     "promote_user": "提升用户为管理员",
-    "promote": "提升",
     "promoting": "提升中...",
     "demote_admin": "将管理员降为用户",
-    "demote": "降级",
-    "demoting": "降级中...",
-    "users": "用户",
-    "role": "角色"
+    "demoting": "降级中..."
   },
   "issues": {
     "new_issue": "新建问题",
@@ -76,7 +125,8 @@
     "pages": "页",
     "records": "条记录",
     "prev_page": "上一页",
-    "next_page": "下一页"
+    "next_page": "下一页",
+    "submitted_by": "由"
   },
   "issue_new": {
     "back": "返回问题列表",
@@ -110,7 +160,8 @@
     "issue_info": "问题信息",
     "status": "状态:",
     "created_at": "创建时间:",
-    "labels": "标签:"
+    "labels": "标签:",
+    "no_comments": "暂无评论"
   },
   "api": {
     "unauthorized": "未授权",

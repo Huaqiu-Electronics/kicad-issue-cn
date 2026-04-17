@@ -24,37 +24,57 @@ export default function Navigation({ user, isUserAdmin, lang = 'zh' }: Navigatio
   const { t } = useI18n();
 
   return (
-    <div className="flex items-center gap-4">
-      <Link href={`/${lang}/issues`} className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-        {t('common.nav.issues')}
-      </Link>
-      {user ? (
-        <div className="flex items-center gap-4">
-          {isUserAdmin && (
-            <Link href={`/${lang}/admin`} className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              {t('common.nav.admin')}
-            </Link>
-          )}
-          <span className="text-sm text-muted-foreground">{user.email}</span>
-          <button
-            onClick={handleLogout}
-            className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+    <div className="flex items-center gap-8">
+      <nav className="flex items-center gap-6">
+        <Link 
+          href={`/${lang}/issues`} 
+          className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
+        >
+          {t('common.nav.issues')}
+        </Link>
+        {user && isUserAdmin && (
+          <Link 
+            href={`/${lang}/admin`} 
+            className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
           >
-            {t('common.nav.logout')}
-          </button>
-        </div>
-      ) : (
-        <div className="flex items-center gap-4">
-          <Link href={`/${lang}/login`} className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-            {t('common.nav.login')}
+            {t('common.nav.admin')}
           </Link>
-          <Link href={`/${lang}/register`} className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-            {t('common.nav.register')}
-          </Link>
+        )}
+      </nav>
+      
+      <div className="flex items-center gap-4">
+        {user ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <button
+              onClick={handleLogout}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
+            >
+              {t('common.nav.logout')}
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link 
+              href={`/${lang}/login`} 
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
+            >
+              {t('common.nav.login')}
+            </Link>
+            <Link 
+              href={`/${lang}/register`} 
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
+            >
+              {t('common.nav.register')}
+            </Link>
+          </div>
+        )}
+        
+        <div className="flex items-center gap-3">
+          <LanguageToggle lang={lang} />
+          <ThemeToggle />
         </div>
-      )}
-      <LanguageToggle lang={lang} />
-      <ThemeToggle />
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { LocalIssue } from '@/lib/db';
+import { useI18n } from '@/app/hooks/useI18n';
 
 interface IssueItemProps {
   issue: LocalIssue;
@@ -9,6 +10,7 @@ interface IssueItemProps {
 }
 
 export default function IssueItem({ issue, lang = 'zh' }: IssueItemProps) {
+  const { t } = useI18n();
   const labels = issue.labels ? issue.labels.split(',') : [];
   
   return (
@@ -21,7 +23,7 @@ export default function IssueItem({ issue, lang = 'zh' }: IssueItemProps) {
         <span className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
           #{issue.gitlab_iid}
         </span>
-        <span className="text-sm text-muted-foreground">由 {issue.username} 提交</span>
+        <span className="text-sm text-muted-foreground">{t('issues.submitted_by', 'Submitted by')} {issue.username}</span>
         <span className="text-sm text-muted-foreground">
           {new Date(issue.created_at).toLocaleString()}
         </span>

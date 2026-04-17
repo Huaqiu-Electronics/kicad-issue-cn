@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createIssue } from '@/lib/gitlab';
-import { insertIssue, getAllIssues } from '@/lib/db';
+import { insertIssue, getIssuesByUserId } from '@/lib/db';
+import { requireAuth } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
+    // Require authentication
+    const user = await requireAuth();
+    
     const body = await request.json();
     if (!body.title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
@@ -14,24 +18,35 @@ export async function POST(request: Request) {
     const localIssue = await insertIssue({
       gitlab_iid: gitlabIssue.iid,
       title: body.title,
-      description: body.description,
-      labels: body.labels?.join(',') || undefined,
-      username: body.username || 'Anonymous',
+      user_id: user.id,
     });
     
     return NextResponse.json(localIssue);
   } catch (error) {
     console.error(error);
+    if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+    }
     return NextResponse.json({ error: 'Failed to create issue' }, { status: 500 });
   }
 }
 
 export async function GET(request: Request) {
   try {
-    const issues = await getAllIssues();
+    // Require authentication
+    const user = await requireAuth();
+    
+    const issues = await getIssuesByUserId(user.id);
     return NextResponse.json(issues);
   } catch (error) {
     console.error(error);
+    if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+    }
     return NextResponse.json({ error: 'Failed to list issues' }, { status: 500 });
   }
 }

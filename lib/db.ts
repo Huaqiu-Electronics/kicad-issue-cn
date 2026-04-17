@@ -13,29 +13,23 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export interface LocalIssue {
-  id: number;
+  id: string;
   gitlab_iid: number;
   title: string;
-  description?: string;
-  labels?: string;
-  username: string;
+  user_id: string;
   created_at: string;
 }
 
 export async function insertIssue(data: {
   gitlab_iid: number;
   title: string;
-  description?: string;
-  labels?: string;
-  username: string;
+  user_id: string;
 }): Promise<LocalIssue> {
   const issue = await prisma.issue.create({
     data: {
       gitlabIid: data.gitlab_iid,
       title: data.title,
-      description: data.description,
-      labels: data.labels,
-      username: data.username,
+      userId: data.user_id,
     },
   });
 
@@ -43,14 +37,12 @@ export async function insertIssue(data: {
     id: issue.id,
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
-    description: issue.description,
-    labels: issue.labels,
-    username: issue.username,
+    user_id: issue.userId,
     created_at: issue.createdAt.toISOString(),
   };
 }
 
-export async function getIssueById(id: number): Promise<LocalIssue | undefined> {
+export async function getIssueById(id: string): Promise<LocalIssue | undefined> {
   const issue = await prisma.issue.findUnique({
     where: { id },
   });
@@ -61,9 +53,7 @@ export async function getIssueById(id: number): Promise<LocalIssue | undefined> 
     id: issue.id,
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
-    description: issue.description,
-    labels: issue.labels,
-    username: issue.username,
+    user_id: issue.userId,
     created_at: issue.createdAt.toISOString(),
   };
 }
@@ -79,15 +69,14 @@ export async function getIssueByGitlabIid(gitlab_iid: number): Promise<LocalIssu
     id: issue.id,
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
-    description: issue.description,
-    labels: issue.labels,
-    username: issue.username,
+    user_id: issue.userId,
     created_at: issue.createdAt.toISOString(),
   };
 }
 
-export async function getAllIssues(): Promise<LocalIssue[]> {
+export async function getIssuesByUserId(user_id: string): Promise<LocalIssue[]> {
   const issues = await prisma.issue.findMany({
+    where: { userId: user_id },
     orderBy: { createdAt: 'desc' },
   });
 
@@ -95,9 +84,7 @@ export async function getAllIssues(): Promise<LocalIssue[]> {
     id: issue.id,
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
-    description: issue.description,
-    labels: issue.labels,
-    username: issue.username,
+    user_id: issue.userId,
     created_at: issue.createdAt.toISOString(),
   }));
 }
@@ -109,4 +96,4 @@ export async function issueExists(gitlab_iid: number): Promise<boolean> {
   return count > 0;
 }
 
-export { prisma as db };
+export { prisma };

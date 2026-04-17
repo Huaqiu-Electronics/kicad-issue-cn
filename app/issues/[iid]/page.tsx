@@ -2,10 +2,14 @@ import Link from 'next/link';
 import { getIssue, listNotes } from '@/lib/gitlab';
 import CommentList from '@/components/CommentList';
 import CommentForm from '@/components/CommentForm';
+import { requireAuth } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export default async function IssueDetailPage({ params }: { params: Promise<{ iid: string }> }) {
+  // Require authentication
+  await requireAuth();
+  
   const { iid } = await params;
   const issue = await getIssue(parseInt(iid));
   const notes = await listNotes(parseInt(iid));

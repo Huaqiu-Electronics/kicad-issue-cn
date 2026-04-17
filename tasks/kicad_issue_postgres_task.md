@@ -29,7 +29,7 @@ Build a controlled GitLab issue bridge for KiCad:
 - GITLAB_TOKEN
 - GITLAB_PROJECT_ID
 - GITLAB_BASE_URL=https://gitlab.com/api/v4
-- DATABASE_URL=postgresql://user:pass@host:5432/db
+- DATABASE_URL=postgresql://postgres:postgres@localhost:5432/kicad
 - ADMIN_EMAILS=admin@example.com
 
 ---

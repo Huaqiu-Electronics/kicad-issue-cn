@@ -42,61 +42,113 @@ export default function NewIssueForm({ user, lang }: NewIssueFormProps) {
     const style = document.createElement('style');
     style.id = 'markdown-editor-styles';
     style.textContent = `
-      /* Markdown editor dark theme */
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor {
-        --text-color: ${computedTheme === 'dark' ? '#e5e7eb' : '#374151'};
-        --bg-color: ${computedTheme === 'dark' ? '#1f2937' : '#ffffff'};
-        --border-color: ${computedTheme === 'dark' ? '#374151' : '#e5e7eb'};
-        --toolbar-bg: ${computedTheme === 'dark' ? '#111827' : '#f9fafb'};
-        --toolbar-border: ${computedTheme === 'dark' ? '#374151' : '#e5e7eb'};
+      /* Markdown editor light theme */
+      .md-editor {
+        --text-color: #374151;
+        --bg-color: #ffffff;
+        --border-color: #e5e7eb;
+        --toolbar-bg: #f9fafb;
+        --toolbar-border: #e5e7eb;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-container {
+      .md-editor .editor-container {
         border-color: var(--border-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-toolbar {
+      .md-editor .editor-toolbar {
         background-color: var(--toolbar-bg) !important;
         border-color: var(--toolbar-border) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-toolbar button {
+      .md-editor .editor-toolbar button {
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-content {
+      .md-editor .editor-content {
         background-color: var(--bg-color) !important;
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-content textarea {
+      .md-editor .editor-content textarea {
         background-color: var(--bg-color) !important;
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-preview {
+      .md-editor .editor-preview {
         background-color: var(--bg-color) !important;
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-preview pre {
-        background-color: ${computedTheme === 'dark' ? '#111827' : '#f3f4f6'} !important;
+      .md-editor .editor-preview pre {
+        background-color: #f3f4f6 !important;
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-preview code {
-        background-color: ${computedTheme === 'dark' ? '#374151' : '#e5e7eb'} !important;
+      .md-editor .editor-preview code {
+        background-color: #e5e7eb !important;
         color: var(--text-color) !important;
       }
 
-      .${computedTheme === 'dark' ? 'dark' : ''} .md-editor .editor-preview blockquote {
-        border-left: 4px solid ${computedTheme === 'dark' ? '#374151' : '#e5e7eb'} !important;
+      .md-editor .editor-preview blockquote {
+        border-left: 4px solid #e5e7eb !important;
+        color: var(--text-color) !important;
+      }
+
+      /* Markdown editor dark theme */
+      .dark .md-editor {
+        --text-color: #e5e7eb;
+        --bg-color: #1f2937;
+        --border-color: #374151;
+        --toolbar-bg: #111827;
+        --toolbar-border: #374151;
+      }
+
+      .dark .md-editor .editor-container {
+        border-color: var(--border-color) !important;
+      }
+
+      .dark .md-editor .editor-toolbar {
+        background-color: var(--toolbar-bg) !important;
+        border-color: var(--toolbar-border) !important;
+      }
+
+      .dark .md-editor .editor-toolbar button {
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-content {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-content textarea {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-preview {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-preview pre {
+        background-color: #111827 !important;
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-preview code {
+        background-color: #374151 !important;
+        color: var(--text-color) !important;
+      }
+
+      .dark .md-editor .editor-preview blockquote {
+        border-left: 4px solid #374151 !important;
         color: var(--text-color) !important;
       }
     `;
 
     document.head.appendChild(style);
-  }, [computedTheme]);
+  }, []);
 
   // Issue templates
   const templates = {

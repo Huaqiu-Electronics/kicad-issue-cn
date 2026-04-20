@@ -17,6 +17,7 @@ export interface LocalIssue {
   gitlab_iid: number;
   title: string;
   user_id: string;
+  user_nickname: string;
   created_at: string;
 }
 
@@ -31,6 +32,7 @@ export async function insertIssue(data: {
       title: data.title,
       userId: data.user_id,
     },
+    include: { user: true },
   });
 
   return {
@@ -38,6 +40,7 @@ export async function insertIssue(data: {
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
     user_id: issue.userId,
+    user_nickname: issue.user.nickname,
     created_at: issue.createdAt.toISOString(),
   };
 }
@@ -45,6 +48,7 @@ export async function insertIssue(data: {
 export async function getIssueById(id: string): Promise<LocalIssue | undefined> {
   const issue = await prisma.issue.findUnique({
     where: { id },
+    include: { user: true },
   });
 
   if (!issue) return undefined;
@@ -54,6 +58,7 @@ export async function getIssueById(id: string): Promise<LocalIssue | undefined> 
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
     user_id: issue.userId,
+    user_nickname: issue.user.nickname,
     created_at: issue.createdAt.toISOString(),
   };
 }
@@ -61,6 +66,7 @@ export async function getIssueById(id: string): Promise<LocalIssue | undefined> 
 export async function getIssueByGitlabIid(gitlab_iid: number): Promise<LocalIssue | undefined> {
   const issue = await prisma.issue.findUnique({
     where: { gitlabIid: gitlab_iid },
+    include: { user: true },
   });
 
   if (!issue) return undefined;
@@ -70,6 +76,7 @@ export async function getIssueByGitlabIid(gitlab_iid: number): Promise<LocalIssu
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
     user_id: issue.userId,
+    user_nickname: issue.user.nickname,
     created_at: issue.createdAt.toISOString(),
   };
 }
@@ -78,6 +85,7 @@ export async function getIssuesByUserId(user_id: string): Promise<LocalIssue[]> 
   const issues = await prisma.issue.findMany({
     where: { userId: user_id },
     orderBy: { createdAt: 'desc' },
+    include: { user: true },
   });
 
   return issues.map(issue => ({
@@ -85,6 +93,7 @@ export async function getIssuesByUserId(user_id: string): Promise<LocalIssue[]> 
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
     user_id: issue.userId,
+    user_nickname: issue.user.nickname,
     created_at: issue.createdAt.toISOString(),
   }));
 }
@@ -92,6 +101,7 @@ export async function getIssuesByUserId(user_id: string): Promise<LocalIssue[]> 
 export async function getAllIssues(): Promise<LocalIssue[]> {
   const issues = await prisma.issue.findMany({
     orderBy: { createdAt: 'desc' },
+    include: { user: true },
   });
 
   return issues.map(issue => ({
@@ -99,6 +109,7 @@ export async function getAllIssues(): Promise<LocalIssue[]> {
     gitlab_iid: issue.gitlabIid,
     title: issue.title,
     user_id: issue.userId,
+    user_nickname: issue.user.nickname,
     created_at: issue.createdAt.toISOString(),
   }));
 }

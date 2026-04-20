@@ -6,6 +6,7 @@ import { useI18n } from '@/app/hooks/useI18n';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [error, setError] = useState('');
@@ -24,7 +25,7 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, inviteCode }),
+        body: JSON.stringify({ email, nickname, password, inviteCode }),
       });
 
       if (!response.ok) {
@@ -68,6 +69,20 @@ export default function RegisterPage() {
                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-3 py-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">
+                {t('register.nickname')}
+              </label>
+              <input
+                id="nickname"
+                name="nickname"
+                type="text"
+                required
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-3 py-2"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
               />
             </div>
             <div className="mt-4">

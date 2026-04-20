@@ -7,7 +7,12 @@ const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',') || [];
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, inviteCode } = await request.json();
+    const { email, password, nickname, inviteCode } = await request.json();
+
+    // Check required fields
+    if (!email || !password || !nickname) {
+      return NextResponse.json({ error: 'Email, password, and nickname are required' }, { status: 400 });
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -38,6 +43,7 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({
       data: {
         email,
+        nickname,
         passwordHash,
         role: ADMIN_EMAILS.includes(email) ? 'admin' : 'user',
       },
@@ -46,7 +52,7 @@ export async function POST(request: NextRequest) {
     // Set session cookie
     await setSessionCookie(user.id);
 
-    return NextResponse.json({ user: { id: user.id, email: user.email, role: user.role } });
+    return NextResponse.json({ user: { id: user.id, email: user.email, nickname: user.nickname, role: user.role } });
   } catch (error) {
     console.error('Register error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

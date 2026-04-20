@@ -8,6 +8,7 @@ import { useI18n } from '@/app/hooks/useI18n';
 export default function RegisterPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = use(params);
   const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,8 +19,8 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError(t('register.error_required', '请输入邮箱和密码'));
+    if (!email || !nickname || !password) {
+      setError(t('register.error_required', '请输入邮箱、昵称和密码'));
       return;
     }
 
@@ -33,7 +34,7 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, inviteCode }),
+        body: JSON.stringify({ email, nickname, password, inviteCode }),
       });
 
       if (response.ok) {
@@ -94,6 +95,21 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-lg bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 placeholder={t('register.email_placeholder', '请输入邮箱')}
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="nickname" className="block text-sm font-medium text-card-foreground mb-2">
+                {t('register.nickname', '昵称')}
+              </label>
+              <input
+                id="nickname"
+                name="nickname"
+                type="text"
+                required
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                className="w-full px-4 py-3 border border-border rounded-lg bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                placeholder={t('register.nickname_placeholder', '请输入昵称')}
               />
             </div>
             <div className="mt-4">

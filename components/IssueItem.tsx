@@ -11,7 +11,6 @@ interface IssueItemProps {
 
 export default function IssueItem({ issue, lang = 'zh' }: IssueItemProps) {
   const { t } = useI18n();
-  const labels = issue.labels ? issue.labels.split(',') : [];
   
   return (
     <Link 
@@ -23,20 +22,11 @@ export default function IssueItem({ issue, lang = 'zh' }: IssueItemProps) {
         <span className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
           #{issue.gitlab_iid}
         </span>
-        <span className="text-sm text-muted-foreground">{t('issues.submitted_by', 'Submitted by')} {issue.username}</span>
+        <span className="text-sm text-muted-foreground">{t('issues.submitted_by', 'Submitted by')} {issue.user_nickname}</span>
         <span className="text-sm text-muted-foreground">
           {new Date(issue.created_at).toLocaleString()}
         </span>
       </div>
-      {labels.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {labels.map((label, index) => (
-            <span key={index} className="px-3 py-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full">
-              {label.trim()}
-            </span>
-          ))}
-        </div>
-      )}
     </Link>
   );
 }

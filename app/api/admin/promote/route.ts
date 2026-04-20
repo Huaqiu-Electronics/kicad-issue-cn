@@ -7,10 +7,18 @@ export async function POST(request: NextRequest) {
     // Check if user is admin
     await requireAdmin();
 
-    const { email } = await request.json();
+    const { email, id } = await request.json();
 
-    // Find user
-    const user = await prisma.user.findUnique({ where: { email } });
+    // Find user by email or id
+    let user;
+    if (email) {
+      user = await prisma.user.findUnique({ where: { email } });
+    } else if (id) {
+      user = await prisma.user.findUnique({ where: { id } });
+    } else {
+      return NextResponse.json({ error: 'Email or ID is required' }, { status: 400 });
+    }
+
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }

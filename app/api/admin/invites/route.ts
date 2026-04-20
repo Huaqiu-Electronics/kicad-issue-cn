@@ -3,10 +3,14 @@ import { prisma } from '@/lib/db';
 import { requireAdmin } from '@/lib/admin';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     // Check if user is admin
     await requireAdmin();
+
+    // Get email from request body
+    const body = await request.json();
+    const { email } = body;
 
     // Generate invite code (UUID)
     const code = uuidv4();
@@ -14,11 +18,12 @@ export async function POST() {
     // Create invite
     const invite = await prisma.invite.create({
       data: {
+        email,
         code,
       },
     });
 
-    return NextResponse.json({ invite: { id: invite.id, code: invite.code, used: invite.used, createdAt: invite.createdAt } });
+    return NextResponse.json({ invite: { id: invite.id, email: invite.email, token: invite.code, used: invite.used, createdAt: invite.createdAt, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() } });
   } catch (error) {
     console.error('Create invite error:', error);
     if (error instanceof Error) {
@@ -43,7 +48,17 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json({ invites });
+    // Format invites with token and expiresAt
+    const formattedInvites = invites.map(invite => ({
+      id: invite.id,
+      email: invite.email,
+      token: invite.code,
+      used: invite.used,
+      createdAt: invite.createdAt,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    }));
+
+    return NextResponse.json({ invites: formattedInvites });
   } catch (error) {
     console.error('List invites error:', error);
     if (error instanceof Error) {

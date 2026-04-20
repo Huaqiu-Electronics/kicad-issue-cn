@@ -13,11 +13,10 @@ interface User {
 
 interface Invite {
   id: string;
-  email: string;
-  token: string;
-  createdAt: string;
-  expiresAt: string;
+  code: string;
   used: boolean;
+  usedBy: string | null;
+  createdAt: string;
 }
 
 export default function AdminPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -41,7 +40,7 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
       const response = await fetch('/api/admin/users');
       if (response.ok) {
         const data = await response.json();
-        setUsers(data);
+        setUsers(data.users);
       } else {
         const errorData = await response.json();
         setError(errorData.error || t('admin.error', '获取用户列表失败'));
@@ -57,7 +56,7 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
       const response = await fetch('/api/admin/invites');
       if (response.ok) {
         const data = await response.json();
-        setInvites(data);
+        setInvites(data.invites);
       } else {
         const errorData = await response.json();
         setError(errorData.error || t('admin.error', '获取邀请列表失败'));
@@ -68,10 +67,14 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
     }
   };
 
-  const handlePromote = async (userId: string) => {
+  const handlePromote = async (user: User) => {
     try {
-      const response = await fetch(`/api/admin/users/${userId}/promote`, {
+      const response = await fetch('/api/admin/promote', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user.email }),
       });
       if (response.ok) {
         setSuccess(t('admin.promote_success', '用户已提升为管理员'));
@@ -86,10 +89,14 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
     }
   };
 
-  const handleDemote = async (userId: string) => {
+  const handleDemote = async (user: User) => {
     try {
-      const response = await fetch(`/api/admin/users/${userId}/demote`, {
+      const response = await fetch('/api/admin/demote', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user.email }),
       });
       if (response.ok) {
         setSuccess(t('admin.demote_success', '用户已降级为普通用户'));
@@ -213,27 +220,27 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.role === 'ADMIN' 
+                      user.role === 'admin' 
                         ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300' 
                         : 'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300'
                     }`}>
-                      {user.role === 'ADMIN' ? t('admin.admin', '管理员') : t('admin.user', '用户')}
+                      {user.role === 'admin' ? t('admin.admin', '管理员') : t('admin.user', '用户')}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {new Date(user.createdAt).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {user.role === 'ADMIN' ? (
+                    {user.role === 'admin' ? (
                       <button
-                        onClick={() => handleDemote(user.id)}
+                        onClick={() => handleDemote(user)}
                         className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                       >
                         {t('admin.demote', '降级')}
                       </button>
                     ) : (
                       <button
-                        onClick={() => handlePromote(user.id)}
+                        onClick={() => handlePromote(user)}
                         className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors"
                       >
                         {t('admin.promote', '提升')}
@@ -255,13 +262,13 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
             <thead>
               <tr>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  {t('admin.email', '邮箱')}
+                  {t('admin.used_by', '使用者')}
                 </th>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('admin.token', '邀请码')}
                 </th>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  {t('admin.expires_at', '过期时间')}
+                  {t('admin.created_at', '创建时间')}
                 </th>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('admin.status', '状态')}
@@ -272,13 +279,13 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
               {invites.map((invite) => (
                 <tr key={invite.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground">
-                    {invite.email}
+                    {invite.usedBy || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground">
-                    {invite.token}
+                    {invite.code}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                    {new Date(invite.expiresAt).toLocaleString()}
+                    {new Date(invite.createdAt).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${

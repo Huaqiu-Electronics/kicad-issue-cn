@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { prisma } from './db';
 
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',') || [];
+
 export async function getCurrentUser() {
   try {
     const cookiesObj = await cookies();
@@ -9,6 +11,12 @@ export async function getCurrentUser() {
 
     const userId = sessionCookie.value;
     const user = await prisma.user.findUnique({ where: { id: userId } });
+    
+    // Check if user should be admin
+    if (user && ADMIN_EMAILS.includes(user.email) && user.role !== 'admin') {
+      return { ...user, role: 'admin' };
+    }
+    
     return user;
   } catch (error) {
     console.error('Error in getCurrentUser:', error);

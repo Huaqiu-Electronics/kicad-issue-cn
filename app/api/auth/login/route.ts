@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/db';
 import { setSessionCookie } from '@/lib/auth';
 
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',') || [];
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
@@ -19,10 +21,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Set session cookie
-    await setSessionCookie(user.id);
+    // Check if user should be admin
+    let updatedUser = user;
+    if (ADMIN_EMAILS.includes(email) && user.role !== 'admin') {
+      updatedUser = await prisma.user.update({ where: { id: user.id }, data: { role: 'admin' } });
+    }
 
-    return NextResponse.json({ user: { id: user.id, email: user.email, role: user.role } });
+    // Set session cookie
+    await setSessionCookie(updatedUser.id);
+
+    return NextResponse.json({ user: { id: updatedUser.id, email: updatedUser.email, role: updatedUser.role } });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

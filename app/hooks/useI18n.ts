@@ -11,7 +11,9 @@ type Messages = {
 // Load messages for a given locale
 async function loadMessages(locale: string): Promise<Messages> {
   try {
-    const response = await fetch(`/messages/${locale}.json`);
+    // Use absolute URL to ensure we're always fetching from the root
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const response = await fetch(`${baseUrl}/messages/${locale}.json`);
     if (!response.ok) {
       throw new Error(`Failed to load messages for locale: ${locale}`);
     }
@@ -19,7 +21,8 @@ async function loadMessages(locale: string): Promise<Messages> {
   } catch (error) {
     console.error('Error loading messages:', error);
     // Fallback to English if loading fails
-    const fallbackResponse = await fetch('/messages/en.json');
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const fallbackResponse = await fetch(`${baseUrl}/messages/en.json`);
     return await fallbackResponse.json();
   }
 }

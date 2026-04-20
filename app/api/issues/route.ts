@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createIssue } from '@/lib/gitlab';
-import { insertIssue, getIssuesByUserId } from '@/lib/db';
-import { requireAuth } from '@/lib/auth';
+import { insertIssue, getIssuesByUserId, getAllIssues } from '@/lib/db';
+import { requireAuth, getCurrentUser } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {

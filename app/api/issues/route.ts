@@ -13,7 +13,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
     
-    const gitlabIssue = await createIssue(body);
+    // Convert comma-separated labels string to array
+    const issueData = {
+      ...body,
+      labels: body.labels ? body.labels.split(',').map((label: string) => label.trim()) : undefined
+    };
+    
+    const gitlabIssue = await createIssue(issueData);
     
     const localIssue = await insertIssue({
       gitlab_iid: gitlabIssue.iid,

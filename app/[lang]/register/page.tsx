@@ -9,6 +9,7 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
   const { lang } = use(params);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -32,7 +33,7 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, inviteCode }),
       });
 
       if (response.ok) {
@@ -109,6 +110,20 @@ export default function RegisterPage({ params }: { params: Promise<{ lang: strin
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-lg bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 placeholder={t('register.password_placeholder', '请输入密码')}
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="inviteCode" className="block text-sm font-medium text-card-foreground mb-2">
+                {t('register.invite_code', '邀请码（管理员邮箱无需邀请码）')}
+              </label>
+              <input
+                id="inviteCode"
+                name="inviteCode"
+                type="text"
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value)}
+                className="w-full px-4 py-3 border border-border rounded-lg bg-card text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                placeholder={t('register.invite_code_placeholder', '请输入邀请码')}
               />
             </div>
           </div>

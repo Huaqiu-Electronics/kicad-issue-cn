@@ -64,6 +64,7 @@
     "password": "密码",
     "password_placeholder": "请输入密码",
     "invite_code": "邀请码（管理员除外）",
+    "invite_code_placeholder": "请输入邀请码",
     "submit": "注册",
     "submitting": "注册中...",
     "error": "错误:",

@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/app/hooks/useI18n';
+import { Copy } from 'lucide-react';
 
 interface Invite {
   id: string;
-  code: string;
+  token: string;
   used: boolean;
-  usedBy: string | null;
   createdAt: string;
+  email?: string;
+  expiresAt?: string;
 }
 
 interface User {
@@ -128,6 +130,16 @@ export default function AdminPage() {
     }
   };
 
+  const handleCopyCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      // Optionally show a toast or message
+      console.log('Code copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -156,7 +168,7 @@ export default function AdminPage() {
             {newInvite && (
               <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
                 <strong className="font-bold">{t('admin.new_invite')}</strong>
-                <span className="block sm:inline"> {newInvite.code}</span>
+                <span className="block sm:inline"> {newInvite.token}</span>
               </div>
             )}
             <div className="mt-6">
@@ -182,14 +194,21 @@ export default function AdminPage() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {invites.map((invite) => (
                       <tr key={invite.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {invite.code}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 flex items-center">
+                          {invite.token}
+                          <button
+                            onClick={() => handleCopyCode(invite.token)}
+                            className="ml-2 p-1 text-gray-400 hover:text-gray-600 focus:outline-none"
+                            title="Copy code to clipboard"
+                          >
+                            <Copy className="h-4 w-4" />
+                          </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {invite.used ? t('admin.yes') : t('admin.no')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {invite.usedBy || t('admin.na')}
+                          {invite.email || t('admin.na')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(invite.createdAt).toLocaleString()}

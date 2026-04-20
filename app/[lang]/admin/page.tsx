@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/app/hooks/useI18n';
+import { Copy } from 'lucide-react';
 
 interface User {
   id: string;
@@ -13,10 +14,12 @@ interface User {
 
 interface Invite {
   id: string;
-  code: string;
+  email: string;
+  token: string;
   used: boolean;
   usedBy: string | null;
   createdAt: string;
+  expiresAt: string;
 }
 
 export default function AdminPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -27,13 +30,29 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [currentUserEmail, setCurrentUserEmail] = useState('');
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [generatedInvite, setGeneratedInvite] = useState<Invite | null>(null);
   const router = useRouter();
   const { t } = useI18n();
 
   useEffect(() => {
     fetchUsers();
     fetchInvites();
+    fetchCurrentUser();
   }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (response.ok) {
+        const user = await response.json();
+        setCurrentUserEmail(user.email);
+      }
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -133,7 +152,8 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
 
       if (response.ok) {
         const data = await response.json();
-        setSuccess(t('admin.invite_success', '邀请已创建'));
+        setGeneratedInvite(data.invite);
+        setShowInviteDialog(true);
         setNewEmail('');
         fetchInvites();
       } else {
@@ -145,6 +165,26 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
       setError(t('admin.error', '创建邀请失败'));
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleCopyInvite = async () => {
+    if (generatedInvite) {
+      try {
+        await navigator.clipboard.writeText(generatedInvite.token);
+        setSuccess(t('admin.invite_copied', '邀请码已复制到剪贴板'));
+      } catch (error) {
+        console.error('Error copying invite:', error);
+      }
+    }
+  };
+
+  const handleCopyToken = async (token: string) => {
+    try {
+      await navigator.clipboard.writeText(token);
+      setSuccess(t('admin.invite_copied', '邀请码已复制到剪贴板'));
+    } catch (error) {
+      console.error('Error copying token:', error);
     }
   };
 
@@ -232,12 +272,16 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {user.role === 'admin' ? (
-                      <button
-                        onClick={() => handleDemote(user)}
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                      >
-                        {t('admin.demote', '降级')}
-                      </button>
+                      user.email === currentUserEmail ? (
+                        <span className="text-muted-foreground">-</span>
+                      ) : (
+                        <button
+                          onClick={() => handleDemote(user)}
+                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                        >
+                          {t('admin.demote', '降级')}
+                        </button>
+                      )
                     ) : (
                       <button
                         onClick={() => handlePromote(user)}
@@ -262,7 +306,7 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
             <thead>
               <tr>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  {t('admin.used_by', '使用者')}
+                  {t('admin.email', '邮箱')}
                 </th>
                 <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('admin.token', '邀请码')}
@@ -279,10 +323,17 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
               {invites.map((invite) => (
                 <tr key={invite.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground">
-                    {invite.usedBy || '-'}
+                    {invite.email}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground">
-                    {invite.code}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground flex items-center">
+                    {invite.token}
+                    <button
+                      onClick={() => handleCopyToken(invite.token)}
+                      className="ml-2 p-1 text-muted-foreground hover:text-card-foreground focus:outline-none"
+                      title="复制邀请码到剪贴板"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {new Date(invite.createdAt).toLocaleString()}
@@ -302,6 +353,43 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
           </table>
         </div>
       </div>
+
+      {/* Invite Dialog */}
+      {showInviteDialog && generatedInvite && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold mb-6 text-card-foreground">{t('admin.invite_created', '邀请已创建')}</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-muted-foreground mb-2">{t('admin.email', '邮箱')}</label>
+                <p className="text-card-foreground">{generatedInvite.email}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-muted-foreground mb-2">{t('admin.token', '邀请码')}</label>
+                <div className="flex items-center space-x-2">
+                  <code className="flex-1 bg-muted p-3 rounded-lg text-sm font-mono text-card-foreground">
+                    {generatedInvite.token}
+                  </code>
+                  <button
+                    onClick={handleCopyInvite}
+                    className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-colors"
+                  >
+                    {t('admin.copy', '复制')}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="mt-8 flex justify-end">
+              <button
+                onClick={() => setShowInviteDialog(false)}
+                className="px-6 py-2 bg-border text-card-foreground rounded-lg hover:bg-border/80 transition-colors"
+              >
+                {t('admin.close', '关闭')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

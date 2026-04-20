@@ -64,6 +64,7 @@
     "password": "Password",
     "password_placeholder": "Please enter your password",
     "invite_code": "Invite code (required unless you're an admin)",
+    "invite_code_placeholder": "Please enter invite code",
     "submit": "Sign up",
     "submitting": "Signing up...",
     "error": "Error:",

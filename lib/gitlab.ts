@@ -14,22 +14,7 @@ function getHeaders() {
 
 export async function createIssue(data: CreateIssueRequest): Promise<GitLabIssue> {
   if (!GITLAB_TOKEN || !GITLAB_PROJECT_ID) {
-    console.warn('[GitLab] Missing credentials, returning mock data');
-    return {
-      id: Date.now(),
-      iid: 1,
-      title: data.title,
-      description: data.description || '',
-      state: 'opened',
-      labels: data.labels || [],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      author: {
-        id: 1,
-        name: 'Mock User',
-        username: 'mockuser',
-      },
-    };
+    throw new Error('Authentication required to create issues');
   }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues`;
   console.log(`[GitLab] Creating issue: ${url}`);
@@ -45,17 +30,22 @@ export async function createIssue(data: CreateIssueRequest): Promise<GitLabIssue
 }
 
 export async function listIssues(state?: string, labels?: string): Promise<GitLabIssue[]> {
-  if (!GITLAB_TOKEN || !GITLAB_PROJECT_ID) {
-    console.warn('[GitLab] Missing credentials, returning mock data');
-    return [];
-  }
   const url = new URL(`${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues`);
   if (state) url.searchParams.append('state', state);
   if (labels) url.searchParams.append('labels', labels);
   console.log(`[GitLab] Listing issues: ${url.toString()}`);
+  
+  // Use headers with token if available, otherwise make unauthenticated request
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (GITLAB_TOKEN) {
+    headers['PRIVATE-TOKEN'] = GITLAB_TOKEN;
+  }
+  
   const response = await fetch(url.toString(), {
     method: 'GET',
-    headers: getHeaders(),
+    headers,
   });
   if (!response.ok) {
     throw new Error(`Failed to list issues: ${response.status} ${response.statusText}`);
@@ -64,29 +54,20 @@ export async function listIssues(state?: string, labels?: string): Promise<GitLa
 }
 
 export async function getIssue(iid: number): Promise<GitLabIssue> {
-  if (!GITLAB_TOKEN || !GITLAB_PROJECT_ID) {
-    console.warn('[GitLab] Missing credentials, returning mock data');
-    return {
-      id: iid,
-      iid: iid,
-      title: 'Mock Issue',
-      description: 'This is a mock issue description',
-      state: 'opened',
-      labels: [],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      author: {
-        id: 1,
-        name: 'Mock User',
-        username: 'mockuser',
-      },
-    };
-  }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues/${iid}`;
   console.log(`[GitLab] Getting issue: ${url}`);
+  
+  // Use headers with token if available, otherwise make unauthenticated request
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (GITLAB_TOKEN) {
+    headers['PRIVATE-TOKEN'] = GITLAB_TOKEN;
+  }
+  
   const response = await fetch(url, {
     method: 'GET',
-    headers: getHeaders(),
+    headers,
   });
   if (!response.ok) {
     throw new Error(`Failed to get issue: ${response.status} ${response.statusText}`);
@@ -95,15 +76,20 @@ export async function getIssue(iid: number): Promise<GitLabIssue> {
 }
 
 export async function listNotes(iid: number): Promise<GitLabNote[]> {
-  if (!GITLAB_TOKEN || !GITLAB_PROJECT_ID) {
-    console.warn('[GitLab] Missing credentials, returning mock data');
-    return [];
-  }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues/${iid}/notes`;
   console.log(`[GitLab] Listing notes: ${url}`);
+  
+  // Use headers with token if available, otherwise make unauthenticated request
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (GITLAB_TOKEN) {
+    headers['PRIVATE-TOKEN'] = GITLAB_TOKEN;
+  }
+  
   const response = await fetch(url, {
     method: 'GET',
-    headers: getHeaders(),
+    headers,
   });
   if (!response.ok) {
     throw new Error(`Failed to list notes: ${response.status} ${response.statusText}`);
@@ -113,18 +99,7 @@ export async function listNotes(iid: number): Promise<GitLabNote[]> {
 
 export async function createNote(iid: number, data: CreateNoteRequest): Promise<GitLabNote> {
   if (!GITLAB_TOKEN || !GITLAB_PROJECT_ID) {
-    console.warn('[GitLab] Missing credentials, returning mock data');
-    return {
-      id: Date.now(),
-      body: data.body,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      author: {
-        id: 1,
-        name: 'Mock User',
-        username: 'mockuser',
-      },
-    };
+    throw new Error('Authentication required to create notes');
   }
   const url = `${GITLAB_BASE_URL}/projects/${GITLAB_PROJECT_ID}/issues/${iid}/notes`;
   console.log(`[GitLab] Creating note: ${url}`);

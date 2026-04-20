@@ -8,11 +8,11 @@ interface IssuesContentProps {
 }
 
 export default function IssuesContent({ issues }: IssuesContentProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <IssueListClient initialIssues={issues} t={t} />
+      <IssueListClient initialIssues={issues} t={t} lang={locale} />
     </div>
   );
 }

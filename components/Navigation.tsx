@@ -5,18 +5,22 @@ import { Heart, Coffee } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import { useI18n } from '@/app/hooks/useI18n';
+import { useAuth } from './ui/AuthContext';
 
 interface NavigationProps {
-  user: any;
   isUserAdmin: boolean;
   lang?: string;
 }
 
-export default function Navigation({ user, isUserAdmin, lang = 'zh' }: NavigationProps) {
+export default function Navigation({ isUserAdmin, lang = 'zh' }: NavigationProps) {
+  const { user, setUser } = useAuth();
+  
   const handleLogout = async () => {
     await fetch('/api/auth/logout', {
       method: 'POST',
     });
+    // Update user state
+    setUser(null);
     if (typeof window !== 'undefined') {
       window.location.href = `/${lang}/login`;
     }

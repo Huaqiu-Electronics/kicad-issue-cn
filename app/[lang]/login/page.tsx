@@ -4,6 +4,7 @@ import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useI18n } from '@/app/hooks/useI18n';
+import { useAuth } from '@/components/ui/AuthContext';
 
 export default function LoginPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = use(params);
@@ -13,6 +14,7 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
   const [error, setError] = useState('');
   const router = useRouter();
   const { t } = useI18n();
+  const { setUser } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +36,9 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
       });
 
       if (response.ok) {
+        const data = await response.json();
+        // Update user state
+        setUser(data.user);
         // Redirect to issues page on successful login
         router.push(`/${lang}/issues`);
       } else {

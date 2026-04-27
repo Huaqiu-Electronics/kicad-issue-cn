@@ -34,3 +34,16 @@ model Issue {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }
+
+model GuestIssue {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  labels      String?
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  version     String?
+  platform    String?
+  gitlabIid   Int?
+  reviewerId  String?
+}

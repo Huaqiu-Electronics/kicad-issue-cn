@@ -116,7 +116,16 @@
     "promote_user": "提升用户为管理员",
     "promoting": "提升中...",
     "demote_admin": "将管理员降为用户",
-    "demoting": "降级中..."
+    "demoting": "降级中...",
+    "guest_issues": "待审核问题",
+    "approve": "批准",
+    "reject": "拒绝",
+    "approve_success": "问题已批准并提交到GitLab",
+    "reject_success": "问题已拒绝",
+    "no_guest_issues": "暂无待审核问题",
+    "version": "版本",
+    "platform": "平台",
+    "title": "标题"
   },
   "issues": {
     "new_issue": "新建问题",

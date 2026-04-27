@@ -116,7 +116,16 @@
     "promote_user": "Promote User to Admin",
     "promoting": "Promoting...",
     "demote_admin": "Demote Admin to User",
-    "demoting": "Demoting..."
+    "demoting": "Demoting...",
+    "guest_issues": "Pending Guest Issues",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approve_success": "Issue has been approved and submitted to GitLab",
+    "reject_success": "Issue has been rejected",
+    "no_guest_issues": "No pending guest issues",
+    "version": "Version",
+    "platform": "Platform",
+    "title": "Title"
   },
   "issues": {
     "new_issue": "New Issue",

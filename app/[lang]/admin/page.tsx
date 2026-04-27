@@ -22,10 +22,24 @@ interface Invite {
   expiresAt: string;
 }
 
+interface GuestIssue {
+  id: string;
+  title: string;
+  description: string;
+  labels?: string;
+  status: string;
+  createdAt: string;
+  version?: string;
+  platform?: string;
+  gitlabIid?: number;
+  reviewerId?: string;
+}
+
 export default function AdminPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = use(params);
   const [users, setUsers] = useState<User[]>([]);
   const [invites, setInvites] = useState<Invite[]>([]);
+  const [guestIssues, setGuestIssues] = useState<GuestIssue[]>([]);
   const [newEmail, setNewEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -39,8 +53,67 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
   useEffect(() => {
     fetchUsers();
     fetchInvites();
+    fetchGuestIssues();
     fetchCurrentUser();
   }, []);
+
+  const fetchGuestIssues = async () => {
+    try {
+      const response = await fetch('/api/admin/guest-issues');
+      if (response.ok) {
+        const data = await response.json();
+        setGuestIssues(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || t('admin.error', '获取待审核问题失败'));
+      }
+    } catch (error) {
+      console.error('Error fetching guest issues:', error);
+      setError(t('admin.error', '获取待审核问题失败'));
+    }
+  };
+
+  const handleApproveGuestIssue = async (issue: GuestIssue) => {
+    try {
+      const response = await fetch(`/api/admin/guest-issues/${issue.id}/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        setSuccess(t('admin.approve_success', '问题已批准并提交到GitLab'));
+        fetchGuestIssues();
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || t('admin.error', '批准问题失败'));
+      }
+    } catch (error) {
+      console.error('Error approving guest issue:', error);
+      setError(t('admin.error', '批准问题失败'));
+    }
+  };
+
+  const handleRejectGuestIssue = async (issue: GuestIssue) => {
+    try {
+      const response = await fetch(`/api/admin/guest-issues/${issue.id}/reject`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        setSuccess(t('admin.reject_success', '问题已拒绝'));
+        fetchGuestIssues();
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || t('admin.error', '拒绝问题失败'));
+      }
+    } catch (error) {
+      console.error('Error rejecting guest issue:', error);
+      setError(t('admin.error', '拒绝问题失败'));
+    }
+  };
 
   const fetchCurrentUser = async () => {
     try {
@@ -299,7 +372,7 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
       </div>
 
       {/* Invites List */}
-      <div className="bg-card border border-border rounded-lg shadow-sm p-6">
+      <div className="bg-card border border-border rounded-lg shadow-sm p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4 text-card-foreground">{t('admin.invites', '邀请列表')}</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-border">
@@ -349,6 +422,77 @@ export default function AdminPage({ params }: { params: Promise<{ lang: string }
                   </td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Guest Issues List */}
+      <div className="bg-card border border-border rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-semibold mb-4 text-card-foreground">{t('admin.guest_issues', '待审核问题')}</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('admin.title', '标题')}
+                </th>
+                <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('admin.version', '版本')}
+                </th>
+                <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('admin.platform', '平台')}
+                </th>
+                <th className="px-6 py-3 bg-muted text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('admin.created_at', '创建时间')}
+                </th>
+                <th className="px-6 py-3 bg-muted text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('admin.actions', '操作')}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-card divide-y divide-border">
+              {guestIssues.length > 0 ? (
+                guestIssues.map((issue) => (
+                  <tr key={issue.id}>
+                    <td className="px-6 py-4 text-sm text-card-foreground">
+                      <div className="max-w-md truncate">{issue.title}</div>
+                      <div className="mt-1 text-xs text-muted-foreground truncate">
+                        {issue.description.substring(0, 100)}{issue.description.length > 100 ? '...' : ''}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                      {issue.version || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                      {issue.platform || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                      {new Date(issue.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                      <button
+                        onClick={() => handleApproveGuestIssue(issue)}
+                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors"
+                      >
+                        {t('admin.approve', '批准')}
+                      </button>
+                      <button
+                        onClick={() => handleRejectGuestIssue(issue)}
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                      >
+                        {t('admin.reject', '拒绝')}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center text-sm text-muted-foreground">
+                    {t('admin.no_guest_issues', '暂无待审核问题')}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

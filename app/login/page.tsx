@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/app/hooks/useI18n';
+import { useAuth } from '@/components/ui/AuthContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { t } = useI18n();
+  const { setUser } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +33,10 @@ export default function LoginPage() {
         throw new Error(data.error || 'Login failed');
       }
 
+      const data = await response.json();
+      // Update user state
+      setUser(data.user);
+      
       // Redirect to issues page
       router.push('/issues');
     } catch (err) {

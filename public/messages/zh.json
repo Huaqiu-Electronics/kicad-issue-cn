@@ -127,6 +127,22 @@
     "platform": "平台",
     "title": "标题"
   },
+  "guest_issue": {
+    "metadata": "元数据",
+    "save": "保存更改",
+    "saving": "保存中...",
+    "save_success": "问题已更新",
+    "save_error": "更新问题失败",
+    "approve": "批准并发布到GitLab",
+    "approving": "批准中...",
+    "approve_success": "问题已批准并提交到GitLab",
+    "approve_error": "批准问题失败",
+    "reject": "拒绝",
+    "rejecting": "拒绝中...",
+    "reject_success": "问题已拒绝",
+    "reject_error": "拒绝问题失败",
+    "login_required": "请登录以编辑或批准此问题"
+  },
   "issues": {
     "new_issue": "新建问题",
     "search_title": "按标题搜索",

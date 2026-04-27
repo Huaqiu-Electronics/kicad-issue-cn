@@ -127,6 +127,22 @@
     "platform": "Platform",
     "title": "Title"
   },
+  "guest_issue": {
+    "metadata": "Metadata",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "save_success": "Issue updated successfully",
+    "save_error": "Failed to update issue",
+    "approve": "Approve & Post to GitLab",
+    "approving": "Approving...",
+    "approve_success": "Issue approved and posted to GitLab",
+    "approve_error": "Failed to approve issue",
+    "reject": "Reject",
+    "rejecting": "Rejecting...",
+    "reject_success": "Issue rejected",
+    "reject_error": "Failed to reject issue",
+    "login_required": "Please log in to edit or approve this issue"
+  },
   "issues": {
     "new_issue": "New Issue",
     "search_title": "Search by title",

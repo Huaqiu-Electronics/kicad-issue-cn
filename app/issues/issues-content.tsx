@@ -5,14 +5,16 @@ import { useI18n } from '@/app/hooks/useI18n';
 
 interface IssuesContentProps {
   issues: any[];
+  guestIssues: any[];
+  user: any;
 }
 
-export default function IssuesContent({ issues }: IssuesContentProps) {
+export default function IssuesContent({ issues, guestIssues, user }: IssuesContentProps) {
   const { t, locale } = useI18n();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <IssueListClient initialIssues={issues} t={t} lang={locale} />
+      <IssueListClient initialIssues={issues} initialGuestIssues={guestIssues} t={t} lang={locale} user={user} />
     </div>
   );
 }

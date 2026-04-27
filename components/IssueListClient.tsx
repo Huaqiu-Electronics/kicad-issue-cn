@@ -10,26 +10,32 @@ const ITEMS_PER_PAGE = 10;
 
 interface IssueListClientProps {
   initialIssues: LocalIssue[];
+  initialGuestIssues: any[];
   t: (key: string, fallback?: string) => string;
   lang: string;
+  user: any;
 }
 
-export default function IssueListClient({ initialIssues, t, lang }: IssueListClientProps) {
+export default function IssueListClient({ initialIssues, initialGuestIssues, t, lang, user }: IssueListClientProps) {
   const [issues] = useState<LocalIssue[]>(initialIssues);
+  const [guestIssues] = useState<any[]>(initialGuestIssues);
   const [searchTitle, setSearchTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Combine both issues and guest issues
+  const allIssues = [
+    ...guestIssues.map(gi => ({ ...gi, isGuestIssue: true })),
+    ...issues.map(i => ({ ...i, isGuestIssue: false })),
+  ];
+
   // Compute filtered issues directly during rendering
-  const filteredIssues = issues.filter(issue => {
+  const filteredIssues = allIssues.filter(issue => {
     let match = true;
     if (searchTitle.trim()) {
       match = match && issue.title.toLowerCase().includes(searchTitle.toLowerCase());
     }
-    // Note: We no longer have username field, so we'll skip this filter
     return match;
   });
-
-
 
   const totalPages = Math.ceil(filteredIssues.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -67,7 +73,7 @@ export default function IssueListClient({ initialIssues, t, lang }: IssueListCli
         </Link>
       </div>
       
-      <IssueList issues={currentIssues} t={t} lang={lang} />
+      <IssueList issues={currentIssues} t={t} lang={lang} user={user} />
       
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-10">

@@ -121,4 +121,25 @@ export async function issueExists(gitlab_iid: number): Promise<boolean> {
   return count > 0;
 }
 
+// Guest issue functions
+export async function getAllGuestIssues() {
+  return prisma.guestIssue.findMany({
+    where: { status: 'pending' },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
+export async function getGuestIssueById(id: string) {
+  return prisma.guestIssue.findUnique({
+    where: { id },
+  });
+}
+
+export async function updateGuestIssue(id: string, data: any) {
+  return prisma.guestIssue.update({
+    where: { id },
+    data,
+  });
+}
+
 export { prisma };

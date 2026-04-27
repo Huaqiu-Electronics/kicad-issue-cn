@@ -1,13 +1,13 @@
-import { LocalIssue } from '@/lib/db';
 import IssueItem from './IssueItem';
 
 interface IssueListProps {
-  issues: LocalIssue[];
+  issues: any[];
   t?: (key: string, fallback?: string) => string;
   lang?: string;
+  user?: any;
 }
 
-export default function IssueList({ issues, t, lang = 'zh' }: IssueListProps) {
+export default function IssueList({ issues, t, lang = 'zh', user }: IssueListProps) {
   const translate = t || (key => key);
   return (
     <div className="space-y-6">
@@ -17,7 +17,7 @@ export default function IssueList({ issues, t, lang = 'zh' }: IssueListProps) {
         </div>
       ) : (
         issues.map((issue) => (
-          <IssueItem key={issue.id} issue={issue} lang={lang} />
+          <IssueItem key={issue.id} issue={issue} lang={lang} user={user} />
         ))
       )}
     </div>

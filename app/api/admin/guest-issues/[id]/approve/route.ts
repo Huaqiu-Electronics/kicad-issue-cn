@@ -3,14 +3,15 @@ import { requireAuth } from '@/lib/auth';
 import { createIssue } from '@/lib/gitlab';
 import { prisma } from '@/lib/db';
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Require authentication
     const user = await requireAuth();
+    const { id } = await params;
 
     // Get the guest issue
     const guestIssue = await prisma.guestIssue.findUnique({
-      where: { id: params.id }
+      where: { id }
     });
 
     if (!guestIssue) {
@@ -35,7 +36,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     // Update guest issue status
     const updatedGuestIssue = await prisma.guestIssue.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: 'approved',
         gitlabIid: gitlabIssue.iid,

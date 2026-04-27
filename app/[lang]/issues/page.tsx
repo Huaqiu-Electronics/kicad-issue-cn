@@ -1,4 +1,4 @@
-import { getAllIssues } from '@/lib/db';
+import { getAllIssues, getAllGuestIssues } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import IssuesContent from './issues-content';
 
@@ -8,10 +8,11 @@ export default async function IssuesPage({ params }: { params: Promise<{ lang: s
   const user = await getCurrentUser();
   const { lang } = await params;
   
-  // All users including guests should see all issues
+  // All users including guests should see all issues and pending guest issues
   const issues = await getAllIssues();
+  const guestIssues = await getAllGuestIssues();
 
   return (
-    <IssuesContent issues={issues} lang={lang} />
+    <IssuesContent issues={issues} guestIssues={guestIssues} lang={lang} user={user} />
   );
 }

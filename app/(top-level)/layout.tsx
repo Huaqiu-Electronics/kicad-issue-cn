@@ -2,15 +2,14 @@ import { getCurrentUser } from '@/lib/auth';
 import { isAdmin } from '@/lib/admin';
 import Header from '@/components/Header';
 
-interface LangLayoutProps {
+interface TopLevelLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: string }>;
 }
 
-export default async function LangLayout({ children, params }: LangLayoutProps) {
+export default async function TopLevelLayout({ children }: TopLevelLayoutProps) {
   const user = await getCurrentUser();
   const isUserAdmin = user ? isAdmin(user.email, user.role) : false;
-  const { lang } = await params;
+  const lang = 'zh';
 
   return (
     <>

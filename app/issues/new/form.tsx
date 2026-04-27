@@ -16,9 +16,14 @@ const KICAD_ISSUE_TEMPLATE = `# Description
 \`\`\`
 \`\`\``;
 
-export default function NewIssueForm() {
+interface NewIssueFormProps {
+  issuableTemplate?: string;
+  issueDescription?: string;
+}
+
+export default function NewIssueForm({ issuableTemplate, issueDescription }: NewIssueFormProps) {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState(KICAD_ISSUE_TEMPLATE);
+  const [description, setDescription] = useState(issueDescription || KICAD_ISSUE_TEMPLATE);
   const [labels, setLabels] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');

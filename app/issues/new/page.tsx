@@ -4,14 +4,23 @@ import NewIssueForm from './form';
 
 export const dynamic = 'force-dynamic';
 
-export default async function NewIssuePage() {
+export default async function NewIssuePage({ 
+  searchParams 
+}: { 
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const search = await searchParams;
+
   try {
     // Require authentication
     await requireAuth();
 
     return (
       <div>
-        <NewIssueForm />
+        <NewIssueForm 
+          issuableTemplate={search['issuable_template'] as string} 
+          issueDescription={search['issue[description]'] as string}
+        />
       </div>
     );
   } catch (error) {

@@ -16,9 +16,11 @@ const renderHTML = (text: string) => {
 interface NewIssueFormProps {
   user: any;
   lang: string;
+  issuableTemplate?: string;
+  issueDescription?: string;
 }
 
-export default function NewIssueForm({ user, lang }: NewIssueFormProps) {
+export default function NewIssueForm({ user, lang, issuableTemplate, issueDescription }: NewIssueFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [labels, setLabels] = useState('');
@@ -202,10 +204,17 @@ export default function NewIssueForm({ user, lang }: NewIssueFormProps) {
 `
   };
 
-  // Load default template on component mount
+  // Load template or pre-filled description on component mount
   useEffect(() => {
-    setDescription(templates.default);
-  }, []);
+    if (issueDescription) {
+      setDescription(issueDescription);
+    } else if (issuableTemplate && templates[issuableTemplate as keyof typeof templates]) {
+      setSelectedTemplate(issuableTemplate);
+      setDescription(templates[issuableTemplate as keyof typeof templates]);
+    } else {
+      setDescription(templates.default);
+    }
+  }, [issueDescription, issuableTemplate]);
 
   // Handle template change
   const handleTemplateChange = (template: string) => {
